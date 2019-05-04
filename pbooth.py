@@ -1,7 +1,7 @@
 # Fotobudka - Photobooth application for Raspberry Pi
 # developed by Tymoteusz Sala
 
-
+import uuid
 import picamera
 import itertools
 import cups
@@ -27,7 +27,7 @@ IMAGE_WIDTH      = 640
 IMAGE_HEIGHT     = 480
 BUTTON_PIN       = 26
 LED_PIN          = 19 #connected to external 12v.
-PHOTO_DELAY      = 8
+PHOTO_DELAY      = 3
 overlay_renderer = None
 buttonEvent      = False
 
@@ -35,11 +35,12 @@ buttonEvent      = False
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(LED_PIN, GPIO.OUT)
-
+ 
 
 #merges the 4 images
 def convertMergeImages(fileName):
-    addPreviewOverlay(150,200,55,"merging images...")
+    code = uuid.uuid4().hex[:6].upper()
+    addPreviewOverlay(66,114,55,"merging images...\n Your code: %s" % (code))
     #now merge all the images
     subprocess.call(["montage",
                      IMG1,IMG2,IMG3,IMG4,
@@ -85,7 +86,7 @@ def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
     draw = ImageDraw.Draw(img)
     draw.font = ImageFont.truetype(
                     "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",fontSize)
-    draw.text((xcoord,ycoord), overlayText, (255, 20, 147))
+    draw.text((xcoord,ycoord), overlayText, (66,116,244))
 
     if not overlay_renderer:
         # Note: The call to add_overlay has changed since picamera v.1.10.
