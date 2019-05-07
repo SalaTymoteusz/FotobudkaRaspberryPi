@@ -1,0 +1,38 @@
+{
+  "name": "FotobudkaRaspberryPi",
+  "version": "1.0.0",
+  "description": "Grupowy projekt inżynierski polegający na stworzeniu mini fotobudki przy użyciu Raspberry PI",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+	"start": "webpack-dev-server --open --mode development",
+	"build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SalaTymoteusz/FotobudkaRaspberryPi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SalaTymoteusz/FotobudkaRaspberryPi/issues"
+  },
+  "homepage": "https://github.com/SalaTymoteusz/FotobudkaRaspberryPi#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "prop-types": "^15.7.2",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1"
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
