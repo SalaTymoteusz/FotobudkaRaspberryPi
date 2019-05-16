@@ -5,6 +5,9 @@
         <title>Fotobudka</title>
     </head>
     <body>
-            <input id="textboxcode" placeholder="Wpisz kod">
+			<form onsubmit="window.location = 'https://fotobudka.com/' + textboxcode.value; return false;">
+			    <input id="textboxcode" placeholder="Wpisz kod"></input>
+			    <input id="submit" type="submit" value="Zatwierdź">
+            </form>
     </body>
 </html>
