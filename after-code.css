@@ -1,0 +1,13 @@
+﻿body {
+}
+.photos:not(#collage){
+    width: 300px;
+    height:200px;
+    background-color:red;
+}
+
+#collage{
+    width: 900px;
+    height:200px;
+    background-color:black;
+}
