@@ -1,9 +1,16 @@
-﻿body {
+﻿* {
+    box-sizing:border-box;
+}
+body {
+}
+.row:not(#collage){
+    display: flex;
 }
 .photos:not(#collage){
-    width: 300px;
-    height:200px;
-    background-color:red;
+    background-color: red;
+    flex: 33.33%;
+    padding: 5px;
+    width:100%;
 }
 
 #collage{
