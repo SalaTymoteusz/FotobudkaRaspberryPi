@@ -1,13 +1,21 @@
 <!DOCTYPE HTML>
 <html lang="pl">
-    <head>
-        <link rel="stylesheet" href="styles.css" type="text/css"/>
-        <title>Fotobudka</title>
-    </head>
-    <body>
-			<form onsubmit="window.location = 'https://fotobudka.com/' + textboxcode.value; return false;">
-			    <input id="textboxcode" placeholder="Wpisz kod"></input>
-			    <input id="submit" type="submit" value="Zatwierdź">
-            </form>
-    </body>
+<head>
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Fotobudka</title>
+</head>
+<body>
+    <div id="app">
+        <form>
+            <input id="textboxcode" placeholder="Wpisz kod" v-model="code">
+            <input id="submit" type="submit" value="Zatwierdź" v-model="submit">
+        </form>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+
+        <script src="main.js"></script>
+    </div>
+
+</body>
+
 </html>
