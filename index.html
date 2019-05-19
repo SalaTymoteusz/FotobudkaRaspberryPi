@@ -8,14 +8,13 @@
     <div id="app">
         <form>
             <input id="textboxcode" placeholder="Wpisz kod" v-model="code">
-            <input id="submit" type="submit" value="Zatwierdź" v-model="submit">
+            <input id="submit" type="button" value="Zatwierdź" v-on:click="createPost()">
         </form>
-        <script src="https://unpkg.com/vue"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
-
-        <script src="main.js"></script>
     </div>
-
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
