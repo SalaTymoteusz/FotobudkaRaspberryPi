@@ -32,5 +32,9 @@ body
     font-size: 30px;
     opacity: 0.9;
     display:inline-block;
-
+    position: relative;
+}
+p {
+    font-size: 40px;
+    color: white;
 }
