@@ -3,25 +3,21 @@ const app = new Vue({
     data: {
         code: '',
         codes: '',
-        id: ''
+        id: []
     },
     created: function () {
-        axios.get('https://jsonplaceholder.typicode.com/todos/5')
+        axios.get('https://jsonplaceholder.typicode.com/todos')
             .then(function (response) {
-                this.codes = response.data
-                console.log(codes);
-                this.id = this.codes.id;
-                console.log(id);
-                {
-                    console.log(id);
+                this.codes = response.data;
+                var all_id = [];
+                for (id in codes) {
+                    if (codes.hasOwnProperty(id)) {
+                        all_id += id;
+                    }
                 }
-                if(id == 5)
-
-                console.log('equal')
-                else
-                console.log('nie')
+                console.log(all_id)
             }
-            )
+        )
             .catch(function (error) {
                 this.codes = "Zly kod"
             })
@@ -38,7 +34,22 @@ const app = new Vue({
                 }).then((response) => { })
                 .catch((e) => {
                     console.error(e)
-                })
-            }
-    }
+                }
+                )
+        },
+        verifyCode() {
+            console.log(jotpe.all_id)
+            for (var i in jotpe.all_id) {
+                if (this.all_id == this.code)
+                    console.log('sieeema');
+                else 
+                    console.log(this.all_id);
+                }
+            
+        },
+        captureCode() {
+            console.log(this.code);
+            this.verifyCode();
+        }
+        }
 });

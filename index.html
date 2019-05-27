@@ -11,12 +11,9 @@
 <body>
     <div id="app">
         <form>
-            <input id="textboxcode" placeholder="Wpisz kod" v-model="code">
-            <input id="submit" type="button" value="Zatwierdź" v-on:click="createPost()">
+            <input id="textboxcode" placeholder="Wpisz kod" v-model="code" type="text">
+            <input id="submit" type="button" value="Zatwierdź" v-on:click="captureCode()">
         </form>
-        <div>
-            <p>{{id}}</p>
-        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.js"></script>
     <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
