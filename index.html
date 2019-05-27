@@ -12,7 +12,7 @@
     <div id="app">
         <form>
             <input id="textboxcode" placeholder="Wpisz kod" v-model="code" type="text">
-            <input id="submit" type="button" value="Zatwierdź" v-on:click="captureCode()">
+            <input id="submit" type="button" value="Zatwierdź" v-on:click="captureCode(), passingToNextPage()">
         </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.js"></script>

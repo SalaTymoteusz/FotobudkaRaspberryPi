@@ -1,21 +1,16 @@
 const app = new Vue({
     el: '#app',
     data: {
-        code: '',
+        code: '2',
         codes: '',
-        id: []
+        id: [],
     },
     created: function () {
+        var all_id = [];
         axios.get('https://jsonplaceholder.typicode.com/todos')
             .then(function (response) {
-                this.codes = response.data;
-                var all_id = [];
-                for (id in codes) {
-                    if (codes.hasOwnProperty(id)) {
-                        all_id += id;
-                    }
-                }
-                console.log(all_id)
+                console.log(response.data.id)
+
             }
         )
             .catch(function (error) {
@@ -38,18 +33,21 @@ const app = new Vue({
                 )
         },
         verifyCode() {
-            console.log(jotpe.all_id)
-            for (var i in jotpe.all_id) {
+            console.log('z')
+           /* for (var i in this.all_id) {
                 if (this.all_id == this.code)
                     console.log('sieeema');
                 else 
                     console.log(this.all_id);
-                }
+                }*/
             
         },
         captureCode() {
             console.log(this.code);
-            this.verifyCode();
+        },
+        passingToNextPage() {
+            var queryString = "#" + this.code
+            window.location.href = "after-code.html" + queryString
         }
         }
 });
