@@ -1,45 +1,59 @@
 # Fotobudka - Photobooth application for Raspberry Pi
 # developed by Tymoteusz Sala
 
+
+
 import uuid
+import json
+import requests
 import picamera
 import itertools
 import cups
 import subprocess
-import os
 from shutil import copyfile
 import sys
 import time
 import logging
 import RPi.GPIO as GPIO
-from PIL import Image, ImageDraw, ImageFont
+from time import sleep
+from PIL import Image, ImageDraw, ImageFont, ImageSequence
+import os
 
 IMG1             = "1.jpg"
 IMG2             = "2.jpg"
 IMG3             = "3.jpg"
+IMG5         = Image.open("/usr/local/src/boothy/logo.jpg")
 CurrentWorkingDir= "/usr/local/src/boothy"
 IMG4             = "4logo.png"
 logDir           = "logs"
 archiveDir       = "photos"
-SCREEN_WIDTH     = 640
-SCREEN_HEIGHT    = 480
-IMAGE_WIDTH      = 640
-IMAGE_HEIGHT     = 480
+SCREEN_WIDTH     = 1024
+SCREEN_HEIGHT    = 600
+IMAGE_WIDTH      = 2592
+IMAGE_HEIGHT     = 1944
 BUTTON_PIN       = 26
-LED_PIN          = 19 #connected to external 12v.
 PHOTO_DELAY      = 3
 overlay_renderer = None
 buttonEvent      = False
 
+
+
 #setup GPIOs
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(LED_PIN, GPIO.OUT)
+
  
 
 #merges the 4 images
 def convertMergeImages(fileName):
     code = uuid.uuid4().hex[:6].upper()
+
+    while compareCodes("code.txt", code) == True:
+        code = uuid.uuid4().hex[:6].upper()
+        appendFile("codes.txt", code)
+        return code
+
+
     addPreviewOverlay(66,114,55,"merging images...\n Your code: %s" % (code))
     #now merge all the images
     subprocess.call(["montage",
@@ -79,15 +93,49 @@ def captureImage(imageName):
     #save image
     camera.capture(imageName, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
     logging.info("Image "+imageName+" captured.")
+    
+def showLogo():
+ 
+ # Load the arbitrarily sized image
+    img = Image.open('/usr/local/src/boothy/logo.png')
+    # Create an image padded to the required size with
+    # mode 'RGB'
+    pad = Image.new('RGBA', (
+        ((img.size[0] + 0) // 32) * 32,
+        ((img.size[1] + 8) // 16) * 16,
+        ))
+    # Paste the original image into the padded one
+    pad.paste(img, (0, 0))
+
+    # Add the overlay with the padded image as the source,
+    # but the original image's dimensions
+
+    o = camera.add_overlay(pad.tobytes(), size=img.size)
+    # By default, the overlay is in layer 0, beneath the
+    # preview (which defaults to layer 2). Here we make
+    # the new overlay semi-transparent, then move it above
+    # the preview
+    o.alpha = 128
+    o.layer = 3
+ 
+        
+    time.sleep(3)
+    camera.remove_overlay(o)
+    
+   
+               
 
 def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
     global overlay_renderer
-    img = Image.new("RGB", (SCREEN_WIDTH, SCREEN_HEIGHT))
+  
+    img = Image.new("RGBA", (640, 480))
     draw = ImageDraw.Draw(img)
     draw.font = ImageFont.truetype(
                     "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",fontSize)
-    draw.text((xcoord,ycoord), overlayText, (66,116,244))
-
+    draw.text((xcoord,ycoord), overlayText, (200,116,0))
+ 
+    
+    
     if not overlay_renderer:
         # Note: The call to add_overlay has changed since picamera v.1.10.
         # If you have a new version of picamera, then please change the
@@ -95,22 +143,96 @@ def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
         #
         overlay_renderer = camera.add_overlay(img.tobytes(),
                                               layer=3,
-                                              size=img.size,
-                                              alpha=128);
+                                              size=img.size)
     else:
         overlay_renderer.update(img.tobytes())
+        
+def sendImg():
+ #  f = open("/usr/local/src/boothy/11.jpg", 'rb')
 
-#run a full series
+   # imgg = open("/usr/local/src/boothy/12.jpg")
+  #  url = "https://fotobudka.projektstudencki.pl/uploadPhoto.php"
+  #  files = {'photo': imgg}
+   # payload = {'code':'afdf'}
+# just set files to a list of tuples of (form_field_name, file_info)
+    
+    #files = {'photo': open("/usr/local/src/boothy/11.jpg",'rb')}
+    #text_data = {"code":"gk422"}
+   # headers = {"Host": "fotobudka.projektstudencki.pl", 'Accept': '*/*'}
+  #  r = requests.post(url, data=payload, files=files, headers=headers)
+  #  print(r.text)
+  
+    url = "https://fotobudka.projektstudencki.pl/uploadPhoto.php"
+
+    payload = {'code':'sfs1'}
+    files = {'photo': open("/usr/local/src/boothy/11.jpg",'rb')}
+    headers = {
+        'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+        'Content-Type': "application/x-www-form-urlencoded",
+        'User-Agent': "PostmanRuntime/7.13.0",
+        'Accept': "*/*",
+        'Cache-Control': "no-cache",
+        'Postman-Token': "f87d182c-1c5b-4135-9048-0207d29ca2ef,3cd5dd2b-faf2-4e11-b5f5-e359c2156383",
+        'Host': "fotobudka.projektstudencki.pl",
+        'accept-encoding': "gzip, deflate",
+        'content-length': "449924",
+        'Connection': "keep-alive",
+        'cache-control': "no-cache"
+        }
+
+    response = requests.request("POST", url, data=payload, files= files, headers=headers)
+
+    print(response.text)
+
+
+def appendFile(filename, code):
+    space = " "
+    code = space + code
+    appendFile = open(filename, 'a')
+    appendFile.write(code)
+    appendFile.close()
+
+
+
+def compareCodes(filename, codelist):
+
+    file = open(filename, "r")
+    read = file.readlines()
+    file.close()
+    for word in codelist:
+        lower = word.lower()
+        count = 0
+        for sentance in read:
+            line = sentance.split()
+            for each in line:
+                line2 = each.lower()
+                line2 = line2.strip("!@#$%^&*(()_+=")
+                if lower == line2:
+                    count += 1
+        if count >= 1:
+            return True
+        else:
+            return False
+
+
+
+#compareCodes("codes.txt", ["ABBB14"])
+
+
+   
+
+    
+
 def play():
 
     fileName = time.strftime("%Y%m%d-%H%M%S")+".jpg"
 
-    #turn on flash
-    GPIO.output(LED_PIN,GPIO.HIGH)
-
+    
+    
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG1)
     time.sleep(1)
+    #sendImg()
 
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG2)
@@ -120,8 +242,6 @@ def play():
     captureImage(IMG3)
     time.sleep(1)
 
-    #turn off flash
-    GPIO.output(LED_PIN,GPIO.LOW)
 
     convertMergeImages(fileName)
     time.sleep(1)
@@ -134,8 +254,8 @@ def play():
 def initCamera(camera):
     logging.info("Initializing camera.")
     #camera settings
-    camera.resolution            = (SCREEN_WIDTH, SCREEN_HEIGHT)
-    camera.framerate             = 24
+    camera.resolution            = (1024, 600)
+    camera.framerate             = 30
     camera.sharpness             = 0
     camera.contrast              = 0
     camera.brightness            = 50
@@ -180,9 +300,14 @@ def onButtonPress():
     play()
     #reset the initial welcome message
     addPreviewOverlay(20,200,55,"Press red button to begin!")
+    
+
+    
+
 
 def onButtonDePress():
     logging.info("Big red button de-pressed!")
+
 
 #start flow
 with picamera.PiCamera() as camera:
@@ -191,11 +316,19 @@ with picamera.PiCamera() as camera:
     try:
         initLogger(logDir)
         initCamera(camera)
-        GPIO.output(LED_PIN,GPIO.LOW)
+       
+        
         logging.info("Starting preview")
-        camera.start_preview()
-        addPreviewOverlay(20,200,55,"Press red button to begin!")
+        
 
+        
+        camera.start_preview()
+        showLogo()
+        
+    
+    
+        addPreviewOverlay(20,200,55,"Press red button to begin!")
+    
         logging.info("Starting application loop")
         while True:
             input_state = GPIO.input(BUTTON_PIN)
@@ -215,5 +348,6 @@ with picamera.PiCamera() as camera:
         logging.info("quitting...")
         cleanUp()
         camera.close()
+    
 
 #end
