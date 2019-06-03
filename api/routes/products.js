@@ -103,13 +103,7 @@ router.get("/:code", (req, res, next) => {
     .then(doc => {
       console.log("From database", doc);
       if (doc) {
-        res.status(200).json({
-            product: doc,
-            request: {
-                type: 'GET',
-                url: 'https://fotobudka.herokuapp.com/products'
-            }
-        });
+        res.status(200).json(doc);
       } else {
         res
           .status(404)
