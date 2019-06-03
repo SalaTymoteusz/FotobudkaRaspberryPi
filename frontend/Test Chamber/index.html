@@ -34,12 +34,12 @@
             <span v-for="photo in itemCountInRow(i)">
                 <div class="[ col-sm ]">
                     <div class="[ info-card ]">
-                        <img style="width: 100%" :src="photo.thumbnailUrl" />
+                        <img style="width: 100%" :src="photo.Image" />
                         <div class="[ info-card-details ] animate">
                             <div class="[ info-card-header ]"></div>
                             <div class="[ info-card-detail ]">
-                                <p>Photo Id: {{photo.id}} Album Id: {{photo.albumId}}</p>
-                                <a :href="photo.url" target="_blank" class="button-wrap">FULL RESOLUTION</a>
+                                <p>Photo Id: {{photo.id}} Album Id: {{photo.albumID}}</p>
+                                <a :href="photo.Image" target="_blank" class="button-wrap">FULL RESOLUTION</a>
                             </div>
                         </div>
                     </div>
