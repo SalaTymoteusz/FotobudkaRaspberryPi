@@ -36,7 +36,7 @@ BUTTON_PIN       = 26
 PHOTO_DELAY      = 3
 overlay_renderer = None
 buttonEvent      = False
-o = None
+CODE = ""
 
 
 
@@ -57,10 +57,9 @@ def sendImage(url, code, imgPath, series_code):
 
 #sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/1.jpg", "1")
 
-#merges the 4 images
-def convertMergeImages(fileName):
+def codeGenerate():
     code = uuid.uuid4().hex[:6].upper()
-    x = compareCodes("/usr/local/src/boothy/codes.txt",[code])
+    x = compareCodes("/usr/local/src/boothy/codes.txt", [code])
     logging.info(str(x))
     if x == False:
         logging.info("Code is unique")
@@ -68,19 +67,20 @@ def convertMergeImages(fileName):
         logging.info("Code is in use")
         while x == True:
             code = uuid.uuid4().hex[:6].upper()
-            x = compareCodes("/usr/local/src/boothy/codes.txt",[code])
+            x = compareCodes("/usr/local/src/boothy/codes.txt", [code])
             logging.info("Generate new code")
-
-
     #logging.info(code)
     appendFile("codes.txt", code)
+    return code
+
+#merges the 4 images
+def convertMergeImages(fileName, code):
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/1.jpg", code)
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/2.jpg", code)
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/3.jpg", code)
 
-
-
     addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
+
     #now merge all the images
     subprocess.call(["montage",
                      IMG1,IMG2,IMG3,IMG4,
@@ -215,7 +215,6 @@ def play():
     fileName = time.strftime("%Y%m%d-%H%M%S")+".jpg"
 
 
-
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG1)
     time.sleep(1)
@@ -229,21 +228,24 @@ def play():
     captureImage(IMG3)
 
     time.sleep(1)
+
     addPreviewOverlay(150,200,100,"KONIEC")
 
+    code = codeGenerate()
 
     presentation()
-    time.sleep(1)
-    convertMergeImages(fileName)
 
     showImage('/usr/local/src/boothy/noTextLogo.png', 0, 8, False, 0)
 
+    addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
+
+    convertMergeImages(fileName, code)
 
 
 
 
-    time.sleep(2)
-    #camera.remove_overlay(o)
+
+    time.sleep(1)
     archiveImage(fileName)
     deleteImages(fileName)
 
