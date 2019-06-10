@@ -12,18 +12,31 @@ if($mysql->connect_error){
     echo "SERVER ERROR - CANNOT CONNECT WITH DB";
 }else{
 
-$code_from_request = $_GET["code"];
+$code_from_request = $_GET["series_code"];
 
-$sql = 'SELECT name FROM Photos where code ='.  $code_from_request;
+$sql = 'SELECT series_id FROM series where series_code ='.  $code_from_request;
+
 $result = $mysql->query($sql);
 $row = $result->fetch_assoc();
 
-$file_name = $row['name'];
 
-$photo_url = 'https://fotobudkaraspberry.000webhostapp.com/photos/' . $file_name;
+$sql = 'SELECT id, name, series_id FROM Photos where series_id ='.  $row['series_id'];
+$result = $mysql->query($sql);
+//$row = $result->fetch_assoc();
 
+$datas = array();
+
+while($row = $result->fetch_assoc()){
+$photo_url = 'https://fotobudkaraspberry.000webhostapp.com/photos/' .  $code_from_request . "/" . $row['name'];
 $data['url'] = $photo_url;
+$data['id'] = $row['id'];
+$data['album_id'] = $row['series_id'];
+//echo json_encode($data);
+//return json_encode($data);($datas, $data);
+array_push($datas, $data);
+}
 
-echo json_encode($data);
+echo json_encode($datas);
+return json_encode($datas);
 
 }
