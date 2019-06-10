@@ -1,5 +1,5 @@
 let ax = axios.create({
-    baseURL: 'https://fotobudka.herokuapp.com/'
+    baseURL: 'https://jsonplaceholder.typicode.com/photos'
 });
 
 new Vue({
@@ -22,7 +22,7 @@ new Vue({
         handleSearch() {
             this.isLoading = true;
 
-            ax.get(`products/${this.term}`).then(response => {
+            ax.get(`?albumId=${this.term}`).then(response => {
                 console.log('API call went okay');
                 this.photos = response.data;
                 this.isLoading = false;
