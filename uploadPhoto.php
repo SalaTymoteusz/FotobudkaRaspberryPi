@@ -17,17 +17,35 @@ if($mysql->connect_error){
 	//var_dump($_FILES['photo']['tmp_name']);
 	//var_dump($_FILES['photo']['name']);
 	
-        if ( $_POST['code'] && $_POST['catalog_id'] && $_FILES['photo']['tmp_name']){
+        if ($_POST['series_code'] && $_FILES['photo']['tmp_name']){
         
         $tmp_file = file_get_contents($_FILES['photo']['tmp_name']);
         $photo_name = $_FILES['photo']['name'];
-        $catalog_id = $_POST['catalog_id'];
-        $upload_dir= "./photos" . "/" . $photo_name;
+        $series_code = $_POST['series_code'];
+        $upload_dir= "./photos" .  "/" . $series_code . "/" . $photo_name;
         
         $upload_status = false;
         $sql_status = false;
+        
+        $sql_insert_series = "INSERT INTO series (series_code) VALUES ('{$series_code}')";
+        
+        $mysql->query($sql_insert_series);
+        
+        if (!file_exists("./photos" .  "/" . $series_code)) {
+         mkdir("./photos" .  "/" . $series_code, 0777, true);
+}
+        
+        var_dump($mysql->query($sql_insert_series));
+        
+        
+        $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
+        $result = $mysql->query($sql_select_series);
+        var_dump( $sql_select_series);
+        var_dump( $result);
+        $row =  $result->fetch_assoc();
+        
          
-        $sql = "INSERT INTO Photos (name, code, catalog_id) VALUES ('{$photo_name}', '{$_POST['code']}', {$_POST['catalog_id']})";
+        $sql = "INSERT INTO Photos (name, code, series_id) VALUES ('{$photo_name}', '{$_POST['code']}', {$row['series_id']})";
         //echo $sql;
         
         if(file_put_contents($upload_dir, $tmp_file)){
