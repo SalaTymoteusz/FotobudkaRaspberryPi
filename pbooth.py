@@ -1,5 +1,4 @@
 # Fotobudka - Photobooth application for Raspberry Pi
-# developed by Tymoteusz Sala
 
 
 
@@ -10,13 +9,15 @@ import picamera
 import itertools
 import cups
 import subprocess
+import os
 from shutil import copyfile
 import sys
 import time
 import logging
 import RPi.GPIO as GPIO
 from time import sleep
-from PIL import Image, ImageDraw, ImageFont, ImageSequence
+from PIL import Image, ImageDraw, ImageFont
+#from resizeimage import resizeimage
 import os
 
 IMG1             = "1.jpg"
@@ -35,6 +36,7 @@ BUTTON_PIN       = 26
 PHOTO_DELAY      = 3
 overlay_renderer = None
 buttonEvent      = False
+o = None
 
 
 
@@ -42,25 +44,51 @@ buttonEvent      = False
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
- 
+
+def sendImage(url, code, imgPath, series_code):
+
+    files = {'photo': open("%s" % (imgPath), 'rb')}
+    payload = {'code': code, 'series_code': series_code}
+
+    response = requests.request("POST", url, data=payload, files=files)
+    print(response.url)
+    print(response.text)
+
+
+#sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/1.jpg", "1")
 
 #merges the 4 images
 def convertMergeImages(fileName):
     code = uuid.uuid4().hex[:6].upper()
+    x = compareCodes("/usr/local/src/boothy/codes.txt",[code])
+    logging.info(str(x))
+    if x == False:
+        logging.info("Code is unique")
+    else:
+        logging.info("Code is in use")
+        while x == True:
+            code = uuid.uuid4().hex[:6].upper()
+            x = compareCodes("/usr/local/src/boothy/codes.txt",[code])
+            logging.info("Generate new code")
 
-    while compareCodes("code.txt", code) == True:
-        code = uuid.uuid4().hex[:6].upper()
-        appendFile("codes.txt", code)
-        return code
+
+    #logging.info(code)
+    appendFile("codes.txt", code)
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/1.jpg", code)
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/2.jpg", code)
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/3.jpg", code)
 
 
-    addPreviewOverlay(66,114,55,"merging images...\n Your code: %s" % (code))
+
+    addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
     #now merge all the images
     subprocess.call(["montage",
                      IMG1,IMG2,IMG3,IMG4,
                      "-geometry", "+2+2",
                      fileName])
     logging.info("Images have been merged.")
+
+
 
 def deleteImages(fileName):
     logging.info("Deleting any old images.")
@@ -93,16 +121,16 @@ def captureImage(imageName):
     #save image
     camera.capture(imageName, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
     logging.info("Image "+imageName+" captured.")
-    
-def showLogo():
- 
+
+def showImage(path, x, y, remove, presentation_time):
+
  # Load the arbitrarily sized image
-    img = Image.open('/usr/local/src/boothy/logo.png')
+    img = Image.open(path)
     # Create an image padded to the required size with
     # mode 'RGB'
     pad = Image.new('RGBA', (
-        ((img.size[0] + 0) // 32) * 32,
-        ((img.size[1] + 8) // 16) * 16,
+        ((img.size[0] + x) // 32) * 32,
+        ((img.size[1] + y) // 16) * 16,
         ))
     # Paste the original image into the padded one
     pad.paste(img, (0, 0))
@@ -117,25 +145,25 @@ def showLogo():
     # the preview
     o.alpha = 128
     o.layer = 3
- 
-        
-    time.sleep(3)
-    camera.remove_overlay(o)
-    
-   
-               
+    time.sleep(presentation_time)
+
+    if remove == True:
+        camera.remove_overlay(o)
+
+
+
 
 def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
     global overlay_renderer
-  
+
     img = Image.new("RGBA", (640, 480))
     draw = ImageDraw.Draw(img)
     draw.font = ImageFont.truetype(
                     "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",fontSize)
     draw.text((xcoord,ycoord), overlayText, (200,116,0))
- 
-    
-    
+
+
+
     if not overlay_renderer:
         # Note: The call to add_overlay has changed since picamera v.1.10.
         # If you have a new version of picamera, then please change the
@@ -146,43 +174,6 @@ def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
                                               size=img.size)
     else:
         overlay_renderer.update(img.tobytes())
-        
-def sendImg():
- #  f = open("/usr/local/src/boothy/11.jpg", 'rb')
-
-   # imgg = open("/usr/local/src/boothy/12.jpg")
-  #  url = "https://fotobudka.projektstudencki.pl/uploadPhoto.php"
-  #  files = {'photo': imgg}
-   # payload = {'code':'afdf'}
-# just set files to a list of tuples of (form_field_name, file_info)
-    
-    #files = {'photo': open("/usr/local/src/boothy/11.jpg",'rb')}
-    #text_data = {"code":"gk422"}
-   # headers = {"Host": "fotobudka.projektstudencki.pl", 'Accept': '*/*'}
-  #  r = requests.post(url, data=payload, files=files, headers=headers)
-  #  print(r.text)
-  
-    url = "https://fotobudka.projektstudencki.pl/uploadPhoto.php"
-
-    payload = {'code':'sfs1'}
-    files = {'photo': open("/usr/local/src/boothy/11.jpg",'rb')}
-    headers = {
-        'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-        'Content-Type': "application/x-www-form-urlencoded",
-        'User-Agent': "PostmanRuntime/7.13.0",
-        'Accept': "*/*",
-        'Cache-Control': "no-cache",
-        'Postman-Token': "f87d182c-1c5b-4135-9048-0207d29ca2ef,3cd5dd2b-faf2-4e11-b5f5-e359c2156383",
-        'Host': "fotobudka.projektstudencki.pl",
-        'accept-encoding': "gzip, deflate",
-        'content-length': "449924",
-        'Connection': "keep-alive",
-        'cache-control': "no-cache"
-        }
-
-    response = requests.request("POST", url, data=payload, files= files, headers=headers)
-
-    print(response.text)
 
 
 def appendFile(filename, code):
@@ -209,30 +200,26 @@ def compareCodes(filename, codelist):
                 line2 = line2.strip("!@#$%^&*(()_+=")
                 if lower == line2:
                     count += 1
-        if count >= 1:
-            return True
-        else:
-            return False
+    if count >= 1:
+        return True
+    else:
+        return False
 
 
 
-#compareCodes("codes.txt", ["ABBB14"])
 
 
-   
-
-    
 
 def play():
 
     fileName = time.strftime("%Y%m%d-%H%M%S")+".jpg"
 
-    
-    
+
+
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG1)
     time.sleep(1)
-    #sendImg()
+
 
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG2)
@@ -240,16 +227,33 @@ def play():
 
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG3)
+
     time.sleep(1)
+    addPreviewOverlay(150,200,100,"KONIEC")
 
 
+    presentation()
+    time.sleep(1)
     convertMergeImages(fileName)
-    time.sleep(1)
 
-    time.sleep(15)
+    showImage('/usr/local/src/boothy/noTextLogo.png', 0, 8, False, 0)
 
+
+
+
+
+    time.sleep(2)
+    #camera.remove_overlay(o)
     archiveImage(fileName)
     deleteImages(fileName)
+
+def presentation():
+    resizePhoto('/usr/local/src/boothy/1.jpg')
+    showImage('/usr/local/src/boothy/test.jpg', 0, 8, False, 2)
+    resizePhoto('/usr/local/src/boothy/2.jpg')
+    showImage('/usr/local/src/boothy/test.jpg', 0, 8, False, 2)
+    resizePhoto('/usr/local/src/boothy/3.jpg')
+    showImage('/usr/local/src/boothy/test.jpg', 0, 8, False, 2)
 
 def initCamera(camera):
     logging.info("Initializing camera.")
@@ -300,13 +304,20 @@ def onButtonPress():
     play()
     #reset the initial welcome message
     addPreviewOverlay(20,200,55,"Press red button to begin!")
-    
 
-    
+
+
 
 
 def onButtonDePress():
     logging.info("Big red button de-pressed!")
+
+def resizePhoto(path):
+    basewidth = 1024
+    img = Image.open(path)
+    basehight = 600
+    img = img.resize((basewidth,basehight), Image.ANTIALIAS)
+    img.save('test.jpg')
 
 
 #start flow
@@ -316,19 +327,23 @@ with picamera.PiCamera() as camera:
     try:
         initLogger(logDir)
         initCamera(camera)
-       
-        
-        logging.info("Starting preview")
-        
 
-        
+
+        logging.info("Starting preview")
+
+
+
         camera.start_preview()
-        showLogo()
-        
-    
-    
+
+
+
+
+        showImage('/usr/local/src/boothy/logo.png', 0, 8, True, 3)
+
+
+
         addPreviewOverlay(20,200,55,"Press red button to begin!")
-    
+
         logging.info("Starting application loop")
         while True:
             input_state = GPIO.input(BUTTON_PIN)
@@ -348,6 +363,6 @@ with picamera.PiCamera() as camera:
         logging.info("quitting...")
         cleanUp()
         camera.close()
-    
+
 
 #end
