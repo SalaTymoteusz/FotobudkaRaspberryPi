@@ -26,11 +26,13 @@
     </div>
   </div>
 </template>
+
 <script>
 import VueGallery from 'vue-gallery'
 import axios from 'axios'
+
 let ax = axios.create({
-    baseURL: 'https://jsonplaceholder.typicode.com/photos'
+    baseURL: 'https://fotobudkaraspberry.000webhostapp.com/getPhoto.php'
 });
 
 export default {
@@ -47,7 +49,7 @@ export default {
     methods: {
       handleSearch() {
           this.isLoading = true;
-          ax.get(`?albumId=${this.term}`).then(response => {
+          ax.get(`/?series_code=${this.term}`).then(response => {
               console.log('API call went okay');
               this.images = response.data; 
               console.log('images',this.images);
@@ -56,18 +58,9 @@ export default {
           }).catch((error)=>{
               console.warn('Something is wrong with API');
           })
-          this.isLoading = false;
-          var array1 = this.images;
-
-
-          const map1 = array1.map(o => o.url);
-
-        console.log('map');
-        console.log(map1);
-          
+          this.isLoading = false;        
       },
     },
-
     components: {
       'gallery': VueGallery
     }

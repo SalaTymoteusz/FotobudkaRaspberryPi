@@ -51,13 +51,13 @@
                 </div>
                 <div class="col-lg-3 col-md-2"></div>
             </div>
-		
         </div>
     </div>
 	</div>
 </template>
+
 <script>
-	export default {
+export default {
 		data(){
 			return {
 				email : "",
@@ -73,10 +73,6 @@
 		   		.catch(err => console.log(err))
 		   	}
 		}
-	}
+}
 </script>
-<!--When a <style> tag has the scoped attribute, its CSS will apply to elements of the current component only. -->
-<style scoped>
-@import './../css/auth.css';
-</style>
 
