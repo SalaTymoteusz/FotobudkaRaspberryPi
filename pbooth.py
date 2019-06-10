@@ -45,10 +45,10 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
-def sendImage(url, code, imgPath, series_code):
+def sendImage(url, imgPath, series_code):
 
     files = {'photo': open("%s" % (imgPath), 'rb')}
-    payload = {'code': code, 'series_code': series_code}
+    payload = {'series_code': series_code}
 
     response = requests.request("POST", url, data=payload, files=files)
     print(response.url)
@@ -74,19 +74,13 @@ def codeGenerate():
     return code
 
 #merges the 4 images
-def convertMergeImages(fileName, code):
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/1.jpg", code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/2.jpg", code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/3.jpg", code)
+def convertMergeImages(fileName):
 
-    addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
+    showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName)
+
+    # addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
 
     #now merge all the images
-    subprocess.call(["montage",
-                     IMG1,IMG2,IMG3,IMG4,
-                     "-geometry", "+2+2",
-                     fileName])
-    logging.info("Images have been merged.")
 
 
 
@@ -153,6 +147,54 @@ def showImage(path, x, y, remove, presentation_time):
 
 
 
+def showImage2(path, x, y, remove, fileName):
+
+ # Load the arbitrarily sized image
+    img = Image.open(path)
+    # Create an image padded to the required size with
+    # mode 'RGB'
+    pad = Image.new('RGBA', (
+        ((img.size[0] + x) // 32) * 32,
+        ((img.size[1] + y) // 16) * 16,
+        ))
+    # Paste the original image into the padded one
+    pad.paste(img, (0, 0))
+
+    # Add the overlay with the padded image as the source,
+    # but the original image's dimensions
+
+    o = camera.add_overlay(pad.tobytes(), size=img.size)
+    # By default, the overlay is in layer 0, beneath the
+    # preview (which defaults to layer 2). Here we make
+    # the new overlay semi-transparent, then move it above
+    # the preview
+    o.alpha = 128
+    o.layer = 3
+
+
+    code = codeGenerate()
+
+    addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
+
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
+
+    print fileName
+    subprocess.call(["montage",
+                 IMG1, IMG2, IMG3,
+                 "-geometry", "+2+1",
+                 fileName])
+    logging.info("Images have been merged.")
+
+    if remove == True:
+          img = Image.new("RGBA", (640, 480))
+          overlay_renderer.update(img.tobytes())
+          camera.remove_overlay(o)
+
+
+
+
 def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
     global overlay_renderer
 
@@ -213,6 +255,7 @@ def compareCodes(filename, codelist):
 def play():
 
     fileName = time.strftime("%Y%m%d-%H%M%S")+".jpg"
+    code = codeGenerate()
 
 
     countdownFrom(PHOTO_DELAY)
@@ -226,24 +269,18 @@ def play():
 
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG3)
-
     time.sleep(1)
 
     addPreviewOverlay(150,200,100,"KONIEC")
 
-    code = codeGenerate()
 
-    presentation()
+    #presentation()
 
-    showImage('/usr/local/src/boothy/noTextLogo.png', 0, 8, False, 0)
+    #showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, 3, code)
 
-    addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
+    #addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
 
-    convertMergeImages(fileName, code)
-
-
-
-
+    convertMergeImages(fileName)
 
     time.sleep(1)
     archiveImage(fileName)
