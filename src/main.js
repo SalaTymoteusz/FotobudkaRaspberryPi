@@ -6,6 +6,7 @@ import './css/fancybox.min.css';
 import './css/style.css';
 import './css/auth.css';
 import './css/aos.css';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';

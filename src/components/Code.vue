@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div class="vld-parent">
+    <loading :active.sync="isLoading" 
+        :can-cancel="false" 
+        :on-cancel="onCancel"
+        :is-full-page="fullPage"></loading>
     <div class="container">
       <h1 class="title is-1 text-center">Photos</h1>
       <div class="row">
@@ -30,6 +34,7 @@
 <script>
 import VueGallery from 'vue-gallery'
 import axios from 'axios'
+import Loading from 'vue-loading-overlay';
 
 let ax = axios.create({
     baseURL: 'https://fotobudkaraspberry.000webhostapp.com/getPhoto.php'
@@ -43,7 +48,8 @@ export default {
         urls:[],
         index: null,
         term:'',
-        isLoading: false
+        isLoading: false,
+        fullPage: true
       };
     },
     methods: {
@@ -55,14 +61,27 @@ export default {
               console.log('images',this.images);
               this.urls = this.images.map(a => a.url);
               console.log('urls',this.urls);
+              if(response.status == 200){
+                  this.isLoading = false;
+               }
           }).catch((error)=>{
               console.warn('Something is wrong with API');
           })
-          this.isLoading = false;        
+               
       },
+      doAjax() {
+                this.isLoading = true;
+                setTimeout(() => {
+                  this.isLoading = false
+                },5000)
+            },
+            onCancel() {
+              console.log('User cancelled the loader.')
+            }
     },
     components: {
-      'gallery': VueGallery
+      'gallery': VueGallery,
+      Loading
     }
 }
 </script>
