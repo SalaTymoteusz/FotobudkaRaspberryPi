@@ -1,50 +1,37 @@
 <template>
-	<div>
-		<div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-2"></div>
-            <div class="col-lg-5 col-md-4 login-box">
-                <div class="col-lg-12 login-key">
-                    <i class="fa fa-key" aria-hidden="true"></i>
+      <div class="row">
+        <div class="login-wrap">
+          <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+            <label for="tab-1" class="tab">Sign Up</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up">
+            <label for="tab-2" class="tab"></label>
+            <div  @submit.prevent="register" class="login-form">
+              <div class="sign-in-htm">
+                <div class="group">
+                  <label for="user" class="label">Username</label>
+                  <input v-model="name" required autofocus type="text" class="input">
                 </div>
-                <div class="col-lg-12 login-title">
-                    FOTOBUDKA
+                <div class="group">
+                  <label for="user" class="label">E-mail</label>
+                  <input id="user" v-model="email" type="text" class="input">
                 </div>
-                <div class="col-lg-12 login-form">
-                    <div class="col-lg-12 login-form">
-                        <form @submit.prevent="register">
-                            <div class="form-group">
-                                <label class="form-control-label">IMIĘ I NAZWISKO</label>
-                                <input v-model="name" required autofocus type="text" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label">EMAIL</label>
-                                <input required v-model="email" type="text" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label">HASŁO</label>
-                                <input v-model="password" required type="password" class="form-control" id="password" >
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label">POWTÓRZ HASŁO</label>
-                                <input id="password-confirm" v-model="password_confirmation" required type="password" class="form-control" i>
-                            </div>
-
-                            <div class="col-lg-12 loginbttm text-right">
-                              
-                                <div class="login-btm  login-button">
-                                    <button type="submit" class="btn-auth btn-primary"><span class="btn-auth-text">REJESTRACJA</span></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                <div class="group">
+                  <label for="pass" class="label">Password</label>
+                  <input v-model="password" required type="password" class="input" data-type="password">
                 </div>
-                <div class="col-lg-3 col-md-2"></div>
+                <div class="group">
+                  <label for="pass" class="label">Confirm Password</label>
+                  <input v-model="password_confirmation" required type="password" class="input" data-type="password">
+                </div>
+                <div class="group">
+                  <input type="submit" class="button" value="Sign Up">
+                </div>
+              </div>
             </div>
-		
+          </div>
         </div>
-    </div>
-	</div>
+      </div>
 </template>
 <script>
     export default {

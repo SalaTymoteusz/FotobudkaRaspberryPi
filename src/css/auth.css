@@ -1,126 +1,183 @@
-.login-box {
-    margin-top: 75px;
-    height: auto;
-    background: -webkit-linear-gradient(rgb(2, 133, 133), rgb(224, 147, 2));
-    text-align: center;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    font-family: 'Reem Kufi', sans-serif;
-    border-radius: 15px;
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
+
+.login-wrap{
+	width:100%;
+  margin:auto;
+  margin-top:50px;
+	max-width:525px;
+	min-height:650px;
+	position:relative;
+	background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109));
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 }
-.login-key {
-    height: 100px;
-    font-size: 80px;
-    line-height: 100px;
-    background: -webkit-linear-gradient(#27EF9F, #0DB8DE);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.login-wrap-home{
+	width:100%;
+  margin:auto;
+  margin-top:50px;
+	max-width:525px;
+	min-height:300px;
+	position:relative;
+	background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109));
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 }
-.login-title {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 30px;
-    letter-spacing: 2px;
-    margin-top: 15px;
-    font-weight: bold;
-    color: #ECF0F5;
-	font-family: 'Reem Kufi', sans-serif;
+.login-html{
+	width:100%;
+	height:100%;
+	position:absolute;
+	padding:90px 70px 50px 70px;
+	background:rgba(40,57,101,.9);
 }
-.login-form {
-    margin-top: 25px;
-    text-align: left;
+.login-html .sign-in-htm,
+.login-html .sign-up-htm{
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	position:absolute;
+	transform:rotateY(180deg);
+	backface-visibility:hidden;
+	transition:all .4s linear;
 }
-input[type=text] {
-    background-color: #1a22266b;
-    border: none;
-    border-bottom: 2px solid rgb(255, 255, 255);
-    border-top: 0px;
-    border-radius: 0px;
-    font-weight: bold;
-    outline: 0;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    color: #ECF0F5;
-	font-family: 'Reem Kufi', sans-serif;
+.login-html .sign-in,
+.login-html .sign-up,
+.login-form .group .check{
+	display:none;
 }
-input[type=password] {
-    background-color: #1a22266b;
-    border: none;
-    border-bottom: 2px solid rgb(255, 255, 255);
-    border-top: 0px;
-    border-radius: 0px;
-    font-weight: bold;
-    outline: 0;
-    padding-left: 10px;
-    margin-bottom: 20px;
-    color: #ECF0F5;
-	font-family: 'Reem Kufi', sans-serif;
+.login-html .tab,
+.login-form .group .label,
+.login-form .group .button{
+	text-transform:uppercase;
 }
-.form-group {
-    margin-bottom: 40px;
-    outline: 0px;
+.login-html .tab{
+	font-size:22px;
+	margin-right:15px;
+	padding-bottom:5px;
+	margin:0 15px 10px 0;
+	display:inline-block;
+	border-bottom:2px solid transparent;
 }
-.form-control:focus {
-    border-color: inherit;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    border-bottom: 2px solid #0DB8DE;
-    outline: 0;
-    background-color: #1A2226;
-    color: #ECF0F5;
-	transition:0.5s;
+.login-html .sign-in:checked + .tab,
+.login-html .sign-up:checked + .tab{
+	color:#fff;
+	border-color:#1161ee;
 }
-input:focus {
-    outline: none;
-    box-shadow: 0 0 0;
+.login-form{
+	min-height:345px;
+	position:relative;
+	perspective:1000px;
+	transform-style:preserve-3d;
 }
-label {
-    margin-bottom: 0px;
+.login-form .group{
+	margin-bottom:15px;
 }
-.form-control-label {
-    font-size: 10px;
-    color: #ffffff;
-    font-weight: bold;
-    letter-spacing: 1px;
+.login-form .group .label,
+.login-form .group .input,
+.login-form .group .button{
+	width:100%;
+	color:#fff;
+	display:block;
 }
-.btn-outline-primary:hover {
-    background-color: #0DB8DE;
-    right: 0px;
+.login-form .group .input,
+.login-form .group .button{
+	border:none;
+	padding:15px 20px;
+	border-radius:5px;
+	background:rgba(255,255,255,.1);
 }
-.btn-auth{
-    margin: 10px 0px 30px 0px;
-    padding: 15px 30px 15px 30px;
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    border-color:#ffffff !important;
-    background: -webkit-linear-gradient(rgb(250, 150, 19), rgb(247, 178, 51));
-    border: 1px solid transparent;
-    border-radius: 30px;
+.login-form .group input[data-type="password"]{
+	text-security:circle;
+	-webkit-text-security:circle;
 }
-.btn-auth:focus{
-    outline: none;
+.login-form .group .label{
+	color:#aaa;
+	font-size:12px;
 }
-.btn-auth-text{
-    font-family: 'Reem Kufi', sans-serif;
-    font-size: 14px;
-    letter-spacing: 2px;
+.login-form .group .button{
+	background:#1161ee;
 }
-.login-text {
-    text-align: left;
-    padding-left: 0px;
-    color: #A2A4A4;
+.login-form .group label .icon{
+	width:15px;
+	height:15px;
+	border-radius:2px;
+	position:relative;
+	display:inline-block;
+	background:rgba(255,255,255,.1);
 }
-.loginbttm {
-    padding: 0px;
+.login-form .group label .icon:before,
+.login-form .group label .icon:after{
+	content:'';
+	width:10px;
+	height:2px;
+	background:#fff;
+	position:absolute;
+	transition:all .2s ease-in-out 0s;
 }
-.Conceptualize-text{
-font-weight:700;
-color:white;
-font-family: 'Reem Kufi', sans-serif;
+.login-form .group label .icon:before{
+	left:3px;
+	width:5px;
+	bottom:6px;
+	transform:scale(0) rotate(0);
 }
-.social-buttons{
-	color:white;
-	font-size:60px;
+.login-form .group label .icon:after{
+	top:6px;
+	right:0;
+	transform:scale(0) rotate(0);
+}
+.login-form .group .check:checked + label{
+	color:#fff;
+}
+.login-form .group .check:checked + label .icon{
+	background:#1161ee;
+}
+.login-form .group .check:checked + label .icon:before{
+	transform:scale(1) rotate(45deg);
+}
+.login-form .group .check:checked + label .icon:after{
+	transform:scale(1) rotate(-45deg);
+}
+.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm{
+	transform:rotate(0);
+}
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
+	transform:rotate(0);
+}
+
+.hr{
+	height:2px;
+	margin:60px 0 50px 0;
+	background:rgba(255,255,255,.2);
+}
+.foot-lnk{
+	text-align:center;
+}
+
+a {
+  text-decoration:none;
+  color:#FFF;
+}
+.rainbow-button {
+  width:182px;
+  height:50px;
+  background: rgb(17,97,238);
+  border-radius:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-transform:uppercase;
+  font-size: 13px;
+  color: rgb(255,255,255);
+  padding-left:9px;
+}
+
+.rainbow-button:hover {
+  animation:slidebg 3s linear infinite;
+}
+
+@keyframes slidebg {
+  to {
+    background-position:20vw;
+  }
 }

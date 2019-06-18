@@ -1,87 +1,174 @@
 <template>
   <div class="vld-parent">
-    <loading :active.sync="isLoading" 
-        :can-cancel="false" 
-        :on-cancel="onCancel"
-        :is-full-page="fullPage"></loading>
+    <loading
+      :active.sync="isLoading"
+      :can-cancel="false"
+      :on-cancel="onCancel"
+      :opacity="0.0"
+      :is-full-page="fullPage"
+    >
+      <div class="spinner"></div>
+    </loading>
     <div class="container">
-      <h1 class="title is-1 text-center">Photos</h1>
-      <div class="row">
-          <div class="col-sm text-center">
-              <form @submit.prevent="handleSearch">
-                  <label class="label" for="term">Enter your code!</label>
-                  <div class="control text-center">
-                      <input class="input" id="term" type="text" v-model="term" required autofocus>
+      <form @submit.prevent="handleSearch">
+        <div class="row">
+          <div class="login-wrap-home">
+            <div class="login-html">
+              <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+              <label for="tab-1" class="tab">Enter your code</label>
+              <input id="tab-2" type="radio" name="tab" class="sign-up">
+              <label for="tab-2" class="tab"></label>
+              <div class="login-form">
+                <div class="sign-in-htm">
+                  <div class="group">
+                    <input type="text" id="term" class="input" v-model="term" required autofocus>
                   </div>
-              </form>
-          </div>
-      </div>
-      <gallery :images="urls" :index="index" @close="index = null"></gallery>
-      <div class="container-fluid photos">
-        <div class="row align-items-stretch" v-for="(image, id) in images" :key="id" @click="index = id">
-          <div class="col-12 col-md-12 col-lg-12 d-block photo-item" data-aos="fade-up" data-aos-delay="100">
-              <img :src="image.url" alt="image.title" class="img-fluid">
-              <div class="photo-text-more">
-                <span class="icon icon-search"></span>
+                </div>
               </div>
-          </div>   
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+      <gallery :images="urls" :index="index" @close="index = null"></gallery>
+      <div class="cards-wrapper ">
+        <div
+          class="card-grid-space"
+          data-aos="fade-up"
+          data-aos-delay="100"
+          v-for="(image, id) in images"
+          :key="id"
+          @click="index = id"
+        >
+          <a class="card">
+            <img :src="image.url" alt="image.title" >
+          </a>
         </div>
       </div>
-    </div>
   </div>
+
+  <!-- <div class="container"><img :src="getLoader()"/></div> -->
 </template>
 
 <script>
-import VueGallery from 'vue-gallery'
-import axios from 'axios'
-import Loading from 'vue-loading-overlay';
+import VueGallery from "vue-gallery";
+import axios from "axios";
+import Loading from "vue-loading-overlay";
 
 let ax = axios.create({
     baseURL: 'https://fotobudkaraspberry.000webhostapp.com/getPhoto.php'
 });
 
-export default {
-  data: function () {
-      return {
-        items: [],
-        images:[],
-        urls:[],
-        index: null,
-        term:'',
-        isLoading: false,
-        fullPage: true
-      };
-    },
-    methods: {
-      handleSearch() {
-          this.isLoading = true;
-          ax.get(`/?series_code=${this.term}`).then(response => {
-              console.log('API call went okay');
-              this.images = response.data; 
-              console.log('images',this.images);
-              this.urls = this.images.map(a => a.url);
-              console.log('urls',this.urls);
-              if(response.status == 200){
-                  this.isLoading = false;
-               }
-          }).catch((error)=>{
-              console.warn('Something is wrong with API');
-          })
-               
-      },
-      doAjax() {
-                this.isLoading = true;
-                setTimeout(() => {
-                  this.isLoading = false
-                },5000)
-            },
-            onCancel() {
-              console.log('User cancelled the loader.')
-            }
-    },
-    components: {
-      'gallery': VueGallery,
-      Loading
-    }
+/* let ax = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com/photos"
+}); */
+
+function randInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
+
+export default {
+  data: function() {
+    return {
+      items: [],
+      images: [],
+      urls: [],
+      index: null,
+      term: "",
+      isLoading: false,
+      fullPage: true
+    };
+  },
+  methods: {
+    getLoader(imgname) {
+      return require("../assets/loader.gif");
+    },
+/*     handleSearch() {
+      this.images = [];
+      this.urls = [];
+      this.isLoading = true;
+      const CancelToken = axios.CancelToken;
+      const source = CancelToken.source();
+      ax.get(`?albumId=${this.term}`)
+        .then(response => {
+          console.log("Connection with server established.");
+          this.images = response.data;
+
+          if (response.status != 404) {
+            console.log("Downloaded images: ", this.images);
+            this.urls = this.images.map(a => a.url);
+            console.log("Extracted urls: ", this.urls);
+            if (response.status == 200) {
+              this.isLoading = false;
+            }
+          } else {
+            this.isLoading = false;
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+            console.warn(error.response.data);
+            console.warn(error.response.status);
+            console.warn(error.response.headers);
+          } else if (error.request) {
+            console.warn(error.request);
+          } else {
+            console.warn("Error", error.message);
+          }
+          this.isLoading = false;
+        });
+    }, */
+          handleSearch() {
+          this.images = [];
+          this.urls = [];
+          this.isLoading = true;
+          const CancelToken = axios.CancelToken;
+          const source = CancelToken.source();
+          ax.get(`/?series_code=${this.term}`).then(response => {
+              console.log('Connection with server established.');
+              this.images = response.data; 
+              
+              if(response.status != 404){
+                console.log('Downloaded images: ',this.images);
+                this.urls = this.images.map(a => a.url);
+                console.log('Extracted urls: ',this.urls);
+                if(response.status == 200){
+                    this.isLoading = false;
+                }
+              }
+
+              else{
+                this.isLoading = false;
+              }
+              
+          }).catch((error)=>{
+              if (error.response) {
+                console.warn(error.response.data);
+                console.warn(error.response.status);
+                console.warn(error.response.headers);
+               } 
+              else if (error.request) {
+                console.warn(error.request);
+                } 
+              else {
+                console.warn('Error', error.message);
+                }
+              this.isLoading = false;
+          })           
+      },
+    doAjax() {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 5000);
+    },
+    onCancel() {
+      console.log("GET rquest aborted.");
+    }
+  },
+  components: {
+    gallery: VueGallery,
+    Loading
+  }
+};
 </script>
