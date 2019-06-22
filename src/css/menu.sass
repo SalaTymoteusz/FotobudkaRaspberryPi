@@ -1,0 +1,63 @@
+*
+  margin: 0
+  padding: 0
+
+#wrapper
+  position: absolute
+  width: 100%
+  height: 100%
+  overflow: hidden
+
+label
+  cursor: pointer
+  &:focus
+    outline: none
+    
+.menu
+  position: absolute
+  top: 0
+  left: 0
+  background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109))
+  width: 240px
+  height: 100%
+  transform: translate3d(-240px, 0, 0)
+  transition: transform 0.35s
+  z-index: 3
+      
+  label.menu-toggle  
+    position: absolute    
+    right: -60px
+    width: 60px
+    height: 60px
+    line-height: 0px    
+    display: block
+    padding: 0
+    text-indent: -9999px
+    background: rgba(17, 97, 238, 0.3) url(https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png) 50% 50% / 25px 25px no-repeat
+  
+  ul
+    li
+      > label
+        background: url(https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-right-b-128.png) 95% 50% / 16px 16px no-repeat
+      a, label
+        display: block
+        text-align: center
+        padding: 0 20px
+        line-height: 60px
+        text-decoration: none
+        color: #fff
+        &:hover
+          color: #666
+
+ 
+/* hide inputs */          
+.menu-checkbox
+  display: none
+
+/* hide navigation icon for sublabels */    
+.menu .menu label.menu-toggle
+  background: none
+    
+/* fade in checked menu */    
+.menu-checkbox:checked + .menu
+  transform: translate3d(0, 0, 0)

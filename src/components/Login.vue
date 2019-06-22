@@ -14,22 +14,11 @@
             </div>
             <div class="group">
               <label for="pass" class="label">Password</label>
-              <input
-                v-model="password"
-                type="password"
-                class="input"
-                data-type="password"
-              >
-            </div>
-            <div class="group">
-              <input type="submit" class="button" value="Sign In">
+              <input v-model="password" type="password" class="input" data-type="password">
             </div>
             <div class="hr"></div>
             <div class="group">
-              <input type="submit" class="button" value="Facebook">
-            </div>
-			<div class="group">
-              <input type="submit" class="button" value="Google">
+              <input type="submit" class="button" value="Sign In">
             </div>
           </div>
         </div>

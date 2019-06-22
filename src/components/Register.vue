@@ -1,6 +1,6 @@
 <template>
       <div class="row">
-        <div class="login-wrap">
+        <div class="login-wrap-register">
           <div class="login-html">
             <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
             <label for="tab-1" class="tab">Sign Up</label>
@@ -24,6 +24,7 @@
                   <label for="pass" class="label">Confirm Password</label>
                   <input v-model="password_confirmation" required type="password" class="input" data-type="password">
                 </div>
+                <div class="hr"></div>
                 <div class="group">
                   <input type="submit" class="button" value="Sign Up">
                 </div>

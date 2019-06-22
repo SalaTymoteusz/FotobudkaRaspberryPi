@@ -5,10 +5,10 @@ a{color:inherit;text-decoration:none}
 
 .login-wrap{
 	width:100%;
-  margin:auto;
-  margin-top:50px;
+  	margin:auto;
+  	margin-top:125px;
 	max-width:525px;
-	min-height:650px;
+	min-height:500px;
 	position:relative;
 	background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109));
 	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
@@ -16,9 +16,19 @@ a{color:inherit;text-decoration:none}
 .login-wrap-home{
 	width:100%;
   margin:auto;
-  margin-top:50px;
+  margin-top:125px;
 	max-width:525px;
-	min-height:300px;
+	min-height:400px;
+	position:relative;
+	background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109));
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+.login-wrap-register{
+	width:100%;
+ 	 margin:auto;
+  	margin-top:125px;
+	max-width:525px;
+	min-height:700px;
 	position:relative;
 	background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109));
 	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
@@ -147,7 +157,7 @@ a{color:inherit;text-decoration:none}
 
 .hr{
 	height:2px;
-	margin:60px 0 50px 0;
+	margin:30px 0 30px 0;
 	background:rgba(255,255,255,.2);
 }
 .foot-lnk{
@@ -157,23 +167,6 @@ a{color:inherit;text-decoration:none}
 a {
   text-decoration:none;
   color:#FFF;
-}
-.rainbow-button {
-  width:182px;
-  height:50px;
-  background: rgb(17,97,238);
-  border-radius:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-transform:uppercase;
-  font-size: 13px;
-  color: rgb(255,255,255);
-  padding-left:9px;
-}
-
-.rainbow-button:hover {
-  animation:slidebg 3s linear infinite;
 }
 
 @keyframes slidebg {
