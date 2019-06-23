@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="main-waraper">
     <div id="app">
       <navbar>
         <div class="top-bar-under"><div class="logo-under"></div></div>
         <div class="top-bar"><img src="@/assets/logo.png"/></div>
-        <div id="wrapper">
+        <div id="">
           <input type="checkbox" id="menu" name="menu" class="menu-checkbox">
           <div class="menu">
             <label class="menu-toggle" for="menu">
@@ -38,6 +38,7 @@
         <router-view/>
       </main>
     </div>
+    
   </div>
 </template>
 <script>

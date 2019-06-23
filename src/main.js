@@ -19,12 +19,12 @@ import store from './store';
 import router from './router';
 import App from './App.vue';
 
+
 library.add(fab);
 library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(vuejquery);
 Vue.use(VueAxios, axios);
-
 AOS.init();
 const token = localStorage.getItem('user-token');
 if (token) {

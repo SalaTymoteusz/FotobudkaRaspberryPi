@@ -13,10 +13,19 @@ a{color:inherit;text-decoration:none}
 	background: -webkit-linear-gradient(rgb(91, 42, 114), rgb(56, 16, 109));
 	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 }
+.login-wrap-toolbar{
+	width:100%;
+  	margin:auto;
+	max-width:525px;
+	min-height:60px;
+	position:relative;
+	background:rgba(40,57,101,.9);
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
 .login-wrap-home{
 	width:100%;
-  margin:auto;
-  margin-top:125px;
+ 	 margin:auto;
+  	margin-top:125px;
 	max-width:525px;
 	min-height:400px;
 	position:relative;
@@ -96,6 +105,17 @@ a{color:inherit;text-decoration:none}
 	padding:15px 20px;
 	border-radius:5px;
 	background:rgba(255,255,255,.1);
+}
+.smallButton{
+	border:none;
+	padding:10px 10px;
+	border-radius:5px;
+	background:rgba(255,255,255,.1);
+	background:#1161ee;
+	width:max-content;
+	color:#fff;
+
+	margin: 0 1rem;
 }
 .login-form .group input[data-type="password"]{
 	text-security:circle;
