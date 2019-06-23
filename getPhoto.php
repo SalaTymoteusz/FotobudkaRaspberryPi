@@ -1,4 +1,8 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: X-Requested-With");
+
 define("SERVER", "localhost");
 define("USER", "id9844448_fotobudka");
 define("PASSWORD", "fotobudka");
@@ -14,7 +18,7 @@ if($mysql->connect_error){
 
 $code_from_request = $_GET["series_code"];
 
-$sql = 'SELECT series_id FROM series where series_code ='.  $code_from_request;
+$sql = 'SELECT series_id FROM series where series_code ="'.  $code_from_request . '"';
 
 $result = $mysql->query($sql);
 $row = $result->fetch_assoc();
@@ -40,3 +44,4 @@ echo json_encode($datas);
 return json_encode($datas);
 
 }
+
