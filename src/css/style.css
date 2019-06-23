@@ -210,7 +210,7 @@ a {
 }
 .img-wrapper:hover img
 {
-	transform: scale(1.4);
+	transform: scale(1.2);
 }
 
 .img-wrapper h2

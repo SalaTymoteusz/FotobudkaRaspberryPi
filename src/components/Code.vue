@@ -59,13 +59,14 @@ import axios from "axios";
 import { Facebook } from 'vue-socialmedia-share';
 import { Twitter } from 'vue-socialmedia-share';
 import { Pinterest } from 'vue-socialmedia-share';
-/* let ax = axios.create({
-  baseURL: "https://fotobudkaraspberry.000webhostapp.com/getPhoto.php"
-}); */
 
 let ax = axios.create({
-  baseURL: "https://jsonplaceholder.typicode.com/photos"
+  baseURL: "https://fotobudkaraspberry.000webhostapp.com/getPhoto.php"
 });
+
+/* let ax = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com/photos"
+}); */
 
 function randInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -91,7 +92,7 @@ export default {
     getLoader(imgname) {
       return require("../assets/loader.gif");
     },
-    handleSearch() {
+    /* handleSearch() {
       this.images = [];
       this.urls = [];
       this.isLoading = true;
@@ -126,8 +127,8 @@ export default {
           }
           this.isLoading = false;
         });
-    }
-    /* handleSearch() {
+    } */
+    handleSearch() {
       this.images = [];
       this.urls = [];
       this.isLoading = true;
@@ -162,7 +163,7 @@ export default {
           }
           this.isLoading = false;
         });
-    } */
+    }
   },
   components: {
     gallery: VueGallery,
