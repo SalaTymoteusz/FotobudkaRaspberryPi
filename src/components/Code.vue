@@ -91,7 +91,7 @@ export default {
       toolbar: false,
       gridL: true,
       gridS: false,
-      normal: true,
+      normalButton: true,
       wrongCode: false
 
     };
