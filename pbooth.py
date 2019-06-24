@@ -19,6 +19,7 @@ from time import sleep
 from PIL import Image, ImageDraw, ImageFont
 #from resizeimage import resizeimage
 import os
+import shutil
 
 IMG1             = "1.jpg"
 IMG2             = "2.jpg"
@@ -55,7 +56,6 @@ def sendImage(url, imgPath, series_code):
     print(response.text)
 
 
-#sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","kod", "/usr/local/src/boothy/1.jpg", "1")
 
 def codeGenerate():
     code = uuid.uuid4().hex[:6].upper()
@@ -92,15 +92,39 @@ def deleteImages(fileName):
         os.remove(IMG2)
     if os.path.isfile(IMG3):
         os.remove(IMG3)
+    if os.path.isfile("1r.jpg"):
+        os.remove("1r.jpg")
+    if os.path.isfile("2r.jpg"):
+        os.remove("2r.jpg")
+    if os.path.isfile("3r.jpg"):
+        os.remove("3r.jpg")
     if os.path.isfile(fileName):
-        os.remove(fileName);
+        os.remove(fileName)
 
 def cleanUp():
     GPIO.cleanup()
 
-def archiveImage(fileName):
-    logging.info("Saving off image: "+fileName)
-    copyfile(fileName,archiveDir+"/"+fileName)
+def archiveImage(fileName, catalogName):
+    logging.info("Saving off image: " + fileName)
+
+    if not os.path.exists("photos/" + catalogName):
+        os.makedirs("photos/" + catalogName)
+        shutil.move(fileName, "photos/" + catalogName)
+        shutil.move("1.jpg", "photos/" + catalogName)
+        shutil.move("2.jpg", "photos/" + catalogName)
+        shutil.move("3.jpg", "photos/" + catalogName)
+
+
+    else:
+        shutil.move(fileName, "photos/" + catalogName)
+        shutil.move("1.jpg", "photos/" + catalogName)
+        shutil.move("2.jpg", "photos/" + catalogName)
+        shutil.move("3.jpg", "photos/" + catalogName)
+
+
+
+    logging.info("copy image: " + fileName)
+
 
 def countdownFrom(secondsStr):
     secondsNum = int(secondsStr)
@@ -137,7 +161,8 @@ def showImage(path, x, y, remove, presentation_time):
     # preview (which defaults to layer 2). Here we make
     # the new overlay semi-transparent, then move it above
     # the preview
-    o.alpha = 128
+    o.alpha = 255
+    o.alpha = 255
     o.layer = 3
     time.sleep(presentation_time)
 
@@ -168,7 +193,7 @@ def showImage2(path, x, y, remove, fileName):
     # preview (which defaults to layer 2). Here we make
     # the new overlay semi-transparent, then move it above
     # the preview
-    o.alpha = 128
+    o.alpha = 255
     o.layer = 3
 
 
@@ -180,6 +205,10 @@ def showImage2(path, x, y, remove, fileName):
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
 
+
+    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
+    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
+    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
     print fileName
     subprocess.call(["montage",
                  IMG1, IMG2, IMG3,
@@ -187,13 +216,41 @@ def showImage2(path, x, y, remove, fileName):
                  fileName])
     logging.info("Images have been merged.")
 
+    #sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
+    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
+
     if remove == True:
           img = Image.new("RGBA", (640, 480))
           overlay_renderer.update(img.tobytes())
           camera.remove_overlay(o)
 
 
+def addPreviewOverlay2(xcoord,ycoord,fontSize,overlayText):
+    global overlay_renderer
 
+    img = Image.new("RGBA", (640, 480))
+    draw = ImageDraw.Draw(img)
+    draw.font = ImageFont.truetype(
+                    "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",fontSize)
+    draw.text((xcoord,ycoord), overlayText, (200,116,0))
+
+
+
+    if not overlay_renderer:
+        # Note: The call to add_overlay has changed since picamera v.1.10.
+        # If you have a new version of picamera, then please change the
+        # first parameter to:  img.tobytes()
+        #
+        overlay_renderer = camera.add_overlay(img.tobytes(),
+                                              layer=3,
+                                              size=img.size)
+    else:
+        overlay_renderer.update(img.tobytes())
+
+    time.sleep(2)
+
+    img = Image.new("RGBA", (640, 480))
+    overlay_renderer.update(img.tobytes())
 
 def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
     global overlay_renderer
@@ -218,6 +275,7 @@ def addPreviewOverlay(xcoord,ycoord,fontSize,overlayText):
         overlay_renderer.update(img.tobytes())
 
 
+
 def appendFile(filename, code):
     space = " "
     code = space + code
@@ -225,6 +283,11 @@ def appendFile(filename, code):
     appendFile.write(code)
     appendFile.close()
 
+
+def remove_overlays(camera):
+    # Remove all overlays from the camera preview
+    for o in camera.overlays:
+        camera.remove_overlay(o)
 
 
 def compareCodes(filename, codelist):
@@ -254,7 +317,9 @@ def compareCodes(filename, codelist):
 
 def play():
 
-    fileName = time.strftime("%Y%m%d-%H%M%S")+".jpg"
+    catalogName = time.strftime("%Y%m%d-%H%M%S")
+
+    fileName = catalogName +".jpg"
     code = codeGenerate()
 
 
@@ -269,30 +334,27 @@ def play():
 
     countdownFrom(PHOTO_DELAY)
     captureImage(IMG3)
-    time.sleep(1)
 
-    addPreviewOverlay(150,200,100,"KONIEC")
+    addPreviewOverlay2(150,200,100,"KONIEC")
 
+    presentation()
 
-    #presentation()
-
-    #showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, 3, code)
-
-    #addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
 
     convertMergeImages(fileName)
+    archiveImage(fileName, catalogName)
 
-    time.sleep(1)
-    archiveImage(fileName)
     deleteImages(fileName)
 
 def presentation():
-    resizePhoto('/usr/local/src/boothy/1.jpg')
-    showImage('/usr/local/src/boothy/test.jpg', 0, 8, False, 2)
-    resizePhoto('/usr/local/src/boothy/2.jpg')
-    showImage('/usr/local/src/boothy/test.jpg', 0, 8, False, 2)
-    resizePhoto('/usr/local/src/boothy/3.jpg')
-    showImage('/usr/local/src/boothy/test.jpg', 0, 8, False, 2)
+
+    resizePhoto('/usr/local/src/boothy/1.jpg', '1r')
+    resizePhoto('/usr/local/src/boothy/2.jpg', '2r')
+    resizePhoto('/usr/local/src/boothy/3.jpg', '3r')
+
+    showImage('/usr/local/src/boothy/1r.jpg', 0, 8, True, 3)
+    showImage('/usr/local/src/boothy/2r.jpg', 0, 8, True, 3)
+    showImage('/usr/local/src/boothy/3r.jpg', 0, 8, True, 3)
+
 
 def initCamera(camera):
     logging.info("Initializing camera.")
@@ -342,7 +404,8 @@ def onButtonPress():
     logging.info("Big red button pressed!")
     play()
     #reset the initial welcome message
-    addPreviewOverlay(20,200,55,"Press red button to begin!")
+
+    addPreviewOverlay(20,200,55,"Press red button to begin!!")
 
 
 
@@ -351,12 +414,13 @@ def onButtonPress():
 def onButtonDePress():
     logging.info("Big red button de-pressed!")
 
-def resizePhoto(path):
+def resizePhoto(path, name):
     basewidth = 1024
     img = Image.open(path)
     basehight = 600
     img = img.resize((basewidth,basehight), Image.ANTIALIAS)
-    img.save('test.jpg')
+    img.save('%s.jpg' % (name))
+    img.close()
 
 
 #start flow
