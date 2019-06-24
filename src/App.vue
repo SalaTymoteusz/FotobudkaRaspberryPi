@@ -1,7 +1,7 @@
 <template>
   <div class="main-waraper">
     <div id="app">
-      <navbar>
+      <div>
         <div class="top-bar-under"><div class="logo-under"></div></div>
         <div class="top-bar"><img src="@/assets/logo.png"/></div>
         <div id="">
@@ -32,7 +32,7 @@
             </ul>
           </div>
         </div>
-      </navbar>
+      </div>
 
       <main class="container">
         <router-view/>

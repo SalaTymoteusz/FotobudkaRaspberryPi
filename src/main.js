@@ -32,7 +32,12 @@ if (token) {
 }
 
 Vue.config.productionTip = false;
-
+Vue.directive('touppercase', {
+  update(el) {
+    // eslint-disable-next-line no-param-reassign
+    el.value = el.value.toUpperCase();
+  },
+});
 new Vue({
   data() {
     return {

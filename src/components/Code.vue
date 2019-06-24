@@ -12,10 +12,10 @@
               <div class="login-form">
                 <div class="sign-in-htm">
                   <div class="group">
-                    <input type="text" id="term" class="input" v-model="term" required autofocus>
+                    <input type="text" id="term" class="input" spellcheck="false" v-model="term" required autofocus v-touppercase>
                   </div>
                   <div class="group">
-                    <button type="submit" class="button" value="Submit">Submit</button>
+                    <button type="submit" v-bind:class="{'button': normalButton, 'madButton': !normalButton}" value="Submit"><div v-if="wrongCode">WRONG CODE</div><div v-if="!wrongCode">Submit</div></button>
                     <div v-if="isLoading">
                       <div class="loader"></div>
                     </div>
@@ -29,24 +29,26 @@
       <div class="row">
         <div v-if="toolbar" class="login-wrap-toolbar">
           <button class="smallButton" v-on:click="gridL = !gridL, gridS = !gridS">
-            <font-awesome-icon :icon="['fas', 'expand-arrows-alt']"/> Grid Size
+            <font-awesome-icon :icon="['fas', 'expand-arrows-alt']"/>Grid Size
           </button>
         </div>
       </div>
     </div>
     <gallery :images="urls" :index="index" @close="index = null"></gallery>
     <div v-bind:class="{'cards-wrapper': gridL, 'cards-wrapper-S': gridS}">
-      <div class="card-grid-space" v-for="(image, id) in images" :key="id" >
+      <div class="card-grid-space" v-for="(image, id) in images" :key="id">
         <div class="card">
           <div class="img-wrapper">
             <img :src="image.url" alt="image.title" @click="index = id">
-            <h2><facebook class="social" :url="image.url" scale="2"></facebook><twitter class="social" :url="image.url" scale="2"></twitter> <pinterest class="social" :url="image.url" scale="2"></pinterest></h2>
+            <h2>
+              <facebook class="social" :url="image.url" scale="2"></facebook>
+              <twitter class="social" :url="image.url" scale="2"></twitter>
+              <pinterest class="social" :url="image.url" scale="2"></pinterest>
+            </h2>
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
   <!--  insert into card grid space for animation
    data-aos="fade-up"
@@ -56,12 +58,16 @@
 <script>
 import VueGallery from "vue-gallery";
 import axios from "axios";
-import { Facebook } from 'vue-socialmedia-share';
-import { Twitter } from 'vue-socialmedia-share';
-import { Pinterest } from 'vue-socialmedia-share';
+import { Facebook } from "vue-socialmedia-share";
+import { Twitter } from "vue-socialmedia-share";
+import { Pinterest } from "vue-socialmedia-share";
+
+/* let ax = axios.create({
+  baseURL: "https://fotobudkaraspberry.000webhostapp.com/getPhoto.php"
+}); */
 
 let ax = axios.create({
-  baseURL: "https://fotobudkaraspberry.000webhostapp.com/getPhoto.php"
+  baseURL: "https://fotobudka.projektstudencki.pl/getPhoto.php"
 });
 
 /* let ax = axios.create({
@@ -85,7 +91,9 @@ export default {
       toolbar: false,
       gridL: true,
       gridS: false,
-      scrollAnimation: true
+      normal: true,
+      wrongCode: false
+
     };
   },
   methods: {
@@ -129,6 +137,7 @@ export default {
         });
     } */
     handleSearch() {
+      this.normalButton = true;
       this.images = [];
       this.urls = [];
       this.isLoading = true;
@@ -136,19 +145,15 @@ export default {
       const source = CancelToken.source();
       ax.get(`/?series_code=${this.term}`)
         .then(response => {
+          this.wrongCode = false;
           console.log("Connection with server established.");
           this.images = response.data;
-
-          if (response.status != 404) {
-            console.log("Downloaded images: ", this.images);
-            this.urls = this.images.map(a => a.url);
-            console.log("Extracted urls: ", this.urls);
-            if (response.status == 200) {
-              this.isLoading = false;
-              this.toolbar = true;
-            }
-          } else {
+          console.log("Downloaded images: ", this.images);
+          this.urls = this.images.map(a => a.url);
+          console.log("Extracted urls: ", this.urls);
+          if (response.status == 200) {
             this.isLoading = false;
+            this.toolbar = true;
           }
         })
         .catch(error => {
@@ -161,6 +166,9 @@ export default {
           } else {
             console.warn("Error", error.message);
           }
+          if(error.response.status == 500)
+          this.wrongCode = true;
+          this.normalButton = false;
           this.isLoading = false;
         });
     }
@@ -169,7 +177,7 @@ export default {
     gallery: VueGallery,
     Facebook,
     Twitter,
-    Pinterest
+    Pinterest,
   }
 };
 </script>

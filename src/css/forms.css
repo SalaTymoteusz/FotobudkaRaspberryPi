@@ -49,6 +49,14 @@ a{color:inherit;text-decoration:none}
 	padding:90px 70px 50px 70px;
 	background:rgba(40,57,101,.9);
 }
+.login-html .tab{
+	font-size:22px;
+	margin-right:15px;
+	padding-bottom:5px;
+	margin:0 15px 10px 0;
+	display:inline-block;
+	border-bottom:2px solid transparent;
+}
 .login-html .sign-in-htm,
 .login-html .sign-up-htm{
 	top:0;
@@ -70,13 +78,43 @@ a{color:inherit;text-decoration:none}
 .login-form .group .button{
 	text-transform:uppercase;
 }
-.login-html .tab{
-	font-size:22px;
-	margin-right:15px;
-	padding-bottom:5px;
-	margin:0 15px 10px 0;
-	display:inline-block;
-	border-bottom:2px solid transparent;
+.login-form .group .label,
+.login-form .group .input,
+.login-form .group .button{
+	width:100%;
+	color:#fff;
+	display:block;
+}
+.login-form .group .input,
+.login-form .group .button{
+	border:none;
+	padding:15px 20px;
+	border-radius:5px;
+	background:rgba(255,255,255,.1);
+}
+.login-form .group .button{
+	background:#1161ee;
+}
+.smallButton{
+	border:none;
+	padding:10px 10px;
+	border-radius:5px;
+	background:rgba(255,255,255,.1);
+	background:#1161ee;
+	width:max-content;
+	color:#fff;
+	margin: 0 1rem;
+}
+.madButton{
+	text-transform:uppercase;
+	width:100%;
+	color:#fff;
+	display:block;
+	border:none;
+	padding:15px 20px;
+	border-radius:5px;
+	background:rgba(255,255,255,.1);
+	background:#b1250d;
 }
 .login-html .sign-in:checked + .tab,
 .login-html .sign-up:checked + .tab{
@@ -92,42 +130,15 @@ a{color:inherit;text-decoration:none}
 .login-form .group{
 	margin-bottom:15px;
 }
-.login-form .group .label,
-.login-form .group .input,
-.login-form .group .button{
-	width:100%;
-	color:#fff;
-	display:block;
-}
-.login-form .group .input,
-.login-form .group .button{
-	border:none;
-	padding:15px 20px;
-	border-radius:5px;
-	background:rgba(255,255,255,.1);
-}
-.smallButton{
-	border:none;
-	padding:10px 10px;
-	border-radius:5px;
-	background:rgba(255,255,255,.1);
-	background:#1161ee;
-	width:max-content;
-	color:#fff;
 
-	margin: 0 1rem;
-}
 .login-form .group input[data-type="password"]{
-	text-security:circle;
 	-webkit-text-security:circle;
 }
 .login-form .group .label{
 	color:#aaa;
 	font-size:12px;
 }
-.login-form .group .button{
-	background:#1161ee;
-}
+
 .login-form .group label .icon{
 	width:15px;
 	height:15px;
