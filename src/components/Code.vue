@@ -62,13 +62,13 @@ import { Facebook } from "vue-socialmedia-share";
 import { Twitter } from "vue-socialmedia-share";
 import { Pinterest } from "vue-socialmedia-share";
 
-/* let ax = axios.create({
-  baseURL: "https://fotobudkaraspberry.000webhostapp.com/getPhoto.php"
-}); */
-
 let ax = axios.create({
-  baseURL: "https://fotobudka.projektstudencki.pl/getPhoto.php"
+  baseURL: "https://fotobudkaraspberry.000webhostapp.com/getPhoto.php"
 });
+
+/* let ax = axios.create({
+  baseURL: "https://fotobudka.projektstudencki.pl/getPhoto.php"
+}); */
 
 /* let ax = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com/photos"
