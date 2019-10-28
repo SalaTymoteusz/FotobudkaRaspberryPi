@@ -20,6 +20,8 @@ from PIL import Image, ImageDraw, ImageFont
 #from resizeimage import resizeimage
 import os
 import shutil
+import png
+import pyqrcode
 
 IMG1             = "1.jpg"
 IMG2             = "2.jpg"
@@ -74,14 +76,44 @@ def codeGenerate():
     return code
 
 #merges the 4 images
-def convertMergeImages(fileName):
-
-    showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName)
+def convertMergeImages(fileName, code):
+    code = code
+    showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName, code)
 
     # addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
 
     #now merge all the images
 
+def showQrcode():
+ # Load the arbitrarily sized image
+    img = Image.open('/usr/local/src/boothy/code.png')
+    # Create an image padded to the required size with
+    # mode 'RGB'
+    pad = Image.new('RGBA', (
+        ((img.size[0] + 24) // 32) * 32,
+        ((img.size[1] + 8) // 16) * 16,
+        ))
+    # Paste the original image into the padded one
+    pad.paste(img, (0, 0))
+
+    # Add the overlay with the padded image as the source,
+    # but the original image's dimensions
+
+    o = camera.add_overlay(pad.tobytes(), size=img.size)
+    # By default, the overlay is in layer 0, beneath the
+    # preview (which defaults to layer 2). Here we make
+    # the new overlay semi-transparent, then move it above
+    # the preview
+    o.alpha = 255
+    o.alpha = 255
+    o.layer = 3
+    time.sleep(5)
+
+    camera.remove_overlay(o)
+
+def generateQRCode(code):
+    big_code = pyqrcode.create(code, error='L', version=None, mode='binary')
+    big_code.png('code.png', scale=8, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
 
 
 def deleteImages(fileName):
@@ -172,7 +204,7 @@ def showImage(path, x, y, remove, presentation_time):
 
 
 
-def showImage2(path, x, y, remove, fileName):
+def showImage2(path, x, y, remove, fileName, code):
 
  # Load the arbitrarily sized image
     img = Image.open(path)
@@ -197,10 +229,8 @@ def showImage2(path, x, y, remove, fileName):
     o.layer = 3
 
 
-    code = codeGenerate()
 
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
-
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
     sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
@@ -339,11 +369,15 @@ def play():
 
     presentation()
 
+    generateQRCode(code)
+    showQrcode()
+    os.remove('code.png')
 
-    convertMergeImages(fileName)
+    convertMergeImages(fileName, code)
     archiveImage(fileName, catalogName)
 
     deleteImages(fileName)
+
 
 def presentation():
 
