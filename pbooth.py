@@ -144,22 +144,22 @@ def deleteImages(fileName):
 def cleanUp():
     GPIO.cleanup()
 
-def archiveImage(fileName, catalogName):
+def archiveImage(fileName, catalogName, path):
     logging.info("Saving off image: " + fileName)
 
-    if not os.path.exists("photos/" + catalogName):
-        os.makedirs("photos/" + catalogName)
-        shutil.move(fileName, "photos/" + catalogName)
-        shutil.move("1.jpg", "photos/" + catalogName)
-        shutil.move("2.jpg", "photos/" + catalogName)
-        shutil.move("3.jpg", "photos/" + catalogName)
+    if not os.path.exists(path + catalogName):
+        os.makedirs(path + catalogName)
+        shutil.move(fileName, path + catalogName)
+        shutil.move("1.jpg", path + catalogName)
+        shutil.move("2.jpg", path + catalogName)
+        shutil.move("3.jpg", path + catalogName)
 
 
     else:
-        shutil.move(fileName, "photos/" + catalogName)
-        shutil.move("1.jpg", "photos/" + catalogName)
-        shutil.move("2.jpg", "photos/" + catalogName)
-        shutil.move("3.jpg", "photos/" + catalogName)
+        shutil.move(fileName, path + catalogName)
+        shutil.move("1.jpg", path + catalogName)
+        shutil.move("2.jpg", path + catalogName)
+        shutil.move("3.jpg", path + catalogName)
 
 
 
@@ -240,6 +240,7 @@ def showImage2(path, x, y, remove, fileName, code):
 
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
     
+    #The assembly process of three photos and delay for showing code
     montage(fileName)
     
     if remove == True:
@@ -371,20 +372,20 @@ def play():
     showQrcode()
     os.remove('code.png')
     convertMergeImages(fileName, code)
-    #if internet_on == True:
-    send(fileName, code)
-    archiveImage(fileName, catalogName)
-    deleteImages(fileName)
-    #else:
-        #destination = '/usr/local/src/boothy/toSend/' + catalogName
-        #archiveImage(fileName, destination)
-        #saveToFile(code, fileName)
-        #deleteImages(fileName)
+    if internet_on == True:
+        print("Internet ON")
+        send(fileName, code)
+        archiveImage(fileName, catalogName, "photos/")
+        deleteImages(fileName)
+    else:
+        print("Internet OFF")
+        destination = '/usr/local/src/boothy/toSend/%s' % (catalogName)
+        archiveImage(fileName, catalogName, destination )
+        saveToFile(code, fileName)
+        deleteImages(fileName)
 
 def saveToFile(code, fileName):
-    #path = destination + '/' + 'code.txt'
-    #print(path)
-    file = open('photos/toSend/'+fileName+'/'+'code.txt', "w")
+    file = open('photos/toSend/%s/code.txt' % (fileName), "w")
     file.write(code)
     file.close()
 
