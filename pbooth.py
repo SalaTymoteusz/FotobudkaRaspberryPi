@@ -22,6 +22,8 @@ import os
 import shutil
 import png
 import pyqrcode
+import urllib2
+import os.path
 
 IMG1             = "1.jpg"
 IMG2             = "2.jpg"
@@ -46,6 +48,13 @@ CODE = ""
 #setup GPIOs
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+def internet_on():
+    try:
+        urllib2.urlopen('http://216.58.192.142', timeout=1)
+        return True
+    except urllib2.URLError as err:
+        return False
 
 
 def sendImage(url, imgPath, series_code):
@@ -231,9 +240,7 @@ def showImage2(path, x, y, remove, fileName, code):
 
 
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
+
 
 
     #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
@@ -245,9 +252,8 @@ def showImage2(path, x, y, remove, fileName, code):
                  "-geometry", "+2+1",
                  fileName])
     logging.info("Images have been merged.")
-
+    send(fileName, code)
     #sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
 
     if remove == True:
           img = Image.new("RGBA", (640, 480))
@@ -367,16 +373,35 @@ def play():
 
     addPreviewOverlay2(150,200,100,"KONIEC")
 
-    presentation()
+    #presentation()
 
     generateQRCode(code)
     showQrcode()
     os.remove('code.png')
 
     convertMergeImages(fileName, code)
+    #if internet_on == True:
+    #send(fileName, code)
     archiveImage(fileName, catalogName)
-
     deleteImages(fileName)
+    #else:
+        #destination = '/usr/local/src/boothy/photos/toSend/' + catalogName
+        #archiveImage(fileName, destination)
+        #saveToFile(code, fileName)
+        #deleteImages(fileName)
+
+def saveToFile(code, fileName):
+    #path = destination + '/' + 'code.txt'
+    #print(path)
+    file = open('photos/toSend/'+fileName+'/'+'code.txt', "w")
+    file.write(code)
+    file.close()
+
+def send(fileName, code):
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
 
 
 def presentation():
