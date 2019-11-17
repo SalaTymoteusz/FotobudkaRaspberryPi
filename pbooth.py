@@ -86,7 +86,6 @@ def codeGenerate():
 
 #merges the 4 images
 def convertMergeImages(fileName, code):
-    code = code
     showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName, code)
 
     # addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
@@ -240,21 +239,9 @@ def showImage2(path, x, y, remove, fileName, code):
 
 
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
-
-
-
-    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
-    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
-    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
-    print fileName
-    subprocess.call(["montage",
-                 IMG1, IMG2, IMG3,
-                 "-geometry", "+2+1",
-                 fileName])
-    logging.info("Images have been merged.")
-    send(fileName, code)
-    #sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
-
+    
+    montage(fileName)
+    
     if remove == True:
           img = Image.new("RGBA", (640, 480))
           overlay_renderer.update(img.tobytes())
@@ -346,7 +333,12 @@ def compareCodes(filename, codelist):
     else:
         return False
 
-
+def montage(fileName):
+    subprocess.call(["montage",
+                 IMG1, IMG2, IMG3,
+                 "-geometry", "+2+1",
+                 fileName])
+    logging.info("Images have been merged.")
 
 
 
@@ -374,18 +366,17 @@ def play():
     addPreviewOverlay2(150,200,100,"KONIEC")
 
     #presentation()
-
+    #present QRCode
     generateQRCode(code)
     showQrcode()
     os.remove('code.png')
-
     convertMergeImages(fileName, code)
     #if internet_on == True:
-    #send(fileName, code)
+    send(fileName, code)
     archiveImage(fileName, catalogName)
     deleteImages(fileName)
     #else:
-        #destination = '/usr/local/src/boothy/photos/toSend/' + catalogName
+        #destination = '/usr/local/src/boothy/toSend/' + catalogName
         #archiveImage(fileName, destination)
         #saveToFile(code, fileName)
         #deleteImages(fileName)
