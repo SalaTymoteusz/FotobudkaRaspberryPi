@@ -132,13 +132,13 @@ def deleteImages():
     if os.path.isfile(IMG3):
         os.remove(IMG3)
     if os.path.isfile("1.jpg"):
-        os.remove("1.jpg")
+        os.remove("1r.jpg")
     if os.path.isfile("2.jpg"):
-        os.remove("2.jpg")
+        os.remove("2r.jpg")
     if os.path.isfile("3.jpg"):
-        os.remove("3.jpg")
+        os.remove("3r.jpg")
     if os.path.isfile("4.jpg"):
-        os.remove("4.jpg")
+        os.remove("4r.jpg")
 
 def cleanUp():
     GPIO.cleanup()
@@ -152,7 +152,6 @@ def archiveImage(catalogName, path):
         shutil.move("2.jpg", path + catalogName)
         shutil.move("3.jpg", path + catalogName)
         shutil.move("4.jpg", path + catalogName)
-
 
     else:
         shutil.move("1.jpg", path + catalogName)
@@ -375,7 +374,7 @@ def play():
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
     
-    if internet_on() == True:
+    if internet_on() == False:
         print("Internet ON")
         send(catalogName, code)
         archiveImage(catalogName, "photos/")
@@ -383,17 +382,16 @@ def play():
     else:
         print("Internet OFF")
         destination = '/usr/local/src/boothy/toSend/'
-        archiveImage(code, destination )
-        saveToFile(code, code)
+        archiveImage(code, destination)
+        appendFile("code.txt", code)
         deleteImages()
 
-def saveToFile(code, catalogName):
-    path = "/usr/local/src/boothy/toSend/%s/code.txt" % (catalogName)
-    print(path)
-    file = open(path, 'w+')
-    #file = open('/usr/local/src/boothy/photos/kutas.txt', 'w+')
-    file.write(code)
-    file.close()
+#def saveToFile(code):
+#    path = "/usr/local/src/boothy/code.txt"
+#    print(path)
+#    file = open(path, 'w')
+#    file.write(code)
+#    file.close()
 
 def send(catalogName, code):
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
