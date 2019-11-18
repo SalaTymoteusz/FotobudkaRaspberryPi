@@ -123,7 +123,7 @@ def generateQRCode(code):
     big_code.png('code.png', scale=8, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
 
 
-def deleteImages(fileName):
+def deleteImages():
     logging.info("Deleting any old images.")
     if os.path.isfile(IMG1):
         os.remove(IMG1)
@@ -131,38 +131,38 @@ def deleteImages(fileName):
         os.remove(IMG2)
     if os.path.isfile(IMG3):
         os.remove(IMG3)
-    if os.path.isfile("1r.jpg"):
-        os.remove("1r.jpg")
-    if os.path.isfile("2r.jpg"):
-        os.remove("2r.jpg")
-    if os.path.isfile("3r.jpg"):
-        os.remove("3r.jpg")
-    if os.path.isfile(fileName):
-        os.remove(fileName)
+    if os.path.isfile("1.jpg"):
+        os.remove("1.jpg")
+    if os.path.isfile("2.jpg"):
+        os.remove("2.jpg")
+    if os.path.isfile("3.jpg"):
+        os.remove("3.jpg")
+    if os.path.isfile("4.jpg"):
+        os.remove("4.jpg")
 
 def cleanUp():
     GPIO.cleanup()
 
-def archiveImage(fileName, catalogName, path):
-    logging.info("Saving off image: " + fileName)
+def archiveImage(catalogName, path):
+    logging.info("Saving off image: " + catalogName)
 
     if not os.path.exists(path + catalogName):
         os.makedirs(path + catalogName)
-        shutil.move(fileName, path + catalogName)
         shutil.move("1.jpg", path + catalogName)
         shutil.move("2.jpg", path + catalogName)
         shutil.move("3.jpg", path + catalogName)
+        shutil.move("4.jpg", path + catalogName)
 
 
     else:
-        shutil.move(fileName, path + catalogName)
         shutil.move("1.jpg", path + catalogName)
         shutil.move("2.jpg", path + catalogName)
         shutil.move("3.jpg", path + catalogName)
+        shutil.move("4.jpg", path + catalogName)
 
 
 
-    logging.info("copy image: " + fileName)
+    logging.info("copy image: " + catalogName)
 
 
 def countdownFrom(secondsStr):
@@ -240,7 +240,7 @@ def showImage2(path, x, y, remove, fileName, code):
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
     
     #The assembly process of three photos and delay for showing code
-    montage(fileName)
+    montage()
     
     if remove == True:
           img = Image.new("RGBA", (640, 480))
@@ -333,11 +333,11 @@ def compareCodes(filename, codelist):
     else:
         return False
 
-def montage(fileName):
+def montage():
     subprocess.call(["montage",
                  IMG1, IMG2, IMG3,
                  "-geometry", "+2+1",
-                 fileName])
+                 "4.jpg"])
     logging.info("Images have been merged.")
 
 
@@ -375,17 +375,17 @@ def play():
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
     
-    if internet_on() == False:
+    if internet_on() == True:
         print("Internet ON")
-        send(fileName, code)
-        archiveImage(fileName, catalogName, "photos/")
-        deleteImages(fileName)
+        send(catalogName, code)
+        archiveImage(catalogName, "photos/")
+        deleteImages()
     else:
         print("Internet OFF")
         destination = '/usr/local/src/boothy/toSend/'
-        archiveImage(fileName, catalogName, destination )
-        saveToFile(code, catalogName)
-        deleteImages(fileName)
+        archiveImage(code, destination )
+        saveToFile(code, code)
+        deleteImages()
 
 def saveToFile(code, catalogName):
     path = "/usr/local/src/boothy/toSend/%s/code.txt" % (catalogName)
@@ -395,11 +395,11 @@ def saveToFile(code, catalogName):
     file.write(code)
     file.close()
 
-def send(fileName, code):
+def send(catalogName, code):
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
-    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/4.jpg", code)
 
 
 def presentation():
