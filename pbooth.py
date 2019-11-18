@@ -80,7 +80,12 @@ def codeGenerate():
             x = compareCodes("/usr/local/src/boothy/codes.txt", [code])
             logging.info("Generate new code")
     #logging.info(code)
-    appendFile("codes.txt", code)
+    
+    if internet_on() == False:
+        print("Added code to codes.txt")
+    else:
+        print("Added code to code.txt")
+        appendFile("code.txt", code)
     return code
 
 #merges the 4 images
@@ -383,7 +388,6 @@ def play():
         print("Internet OFF")
         destination = '/usr/local/src/boothy/toSend/'
         archiveImage(code, destination)
-        appendFile("code.txt", code)
         deleteImages()
 
 #def saveToFile(code):
