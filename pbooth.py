@@ -9,7 +9,6 @@ import picamera
 import itertools
 import cups
 import subprocess
-import os
 from shutil import copyfile
 import sys
 import time
@@ -372,20 +371,27 @@ def play():
     showQrcode()
     os.remove('code.png')
     convertMergeImages(fileName, code)
-    if internet_on == True:
+#    send(fileName, code)
+#    archiveImage(fileName, catalogName, "photos/")
+#    deleteImages(fileName)
+    
+    if internet_on() == False:
         print("Internet ON")
         send(fileName, code)
         archiveImage(fileName, catalogName, "photos/")
         deleteImages(fileName)
     else:
         print("Internet OFF")
-        destination = '/usr/local/src/boothy/toSend/%s' % (catalogName)
+        destination = '/usr/local/src/boothy/toSend/'
         archiveImage(fileName, catalogName, destination )
-        saveToFile(code, fileName)
+        saveToFile(code, catalogName)
         deleteImages(fileName)
 
-def saveToFile(code, fileName):
-    file = open('photos/toSend/%s/code.txt' % (fileName), "w")
+def saveToFile(code, catalogName):
+    path = "/usr/local/src/boothy/toSend/%s/code.txt" % (catalogName)
+    print(path)
+    file = open(path, 'w+')
+    #file = open('/usr/local/src/boothy/photos/kutas.txt', 'w+')
     file.write(code)
     file.close()
 
