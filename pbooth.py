@@ -81,7 +81,7 @@ def codeGenerate():
             logging.info("Generate new code")
     #logging.info(code)
     
-    if internet_on() == True:
+    if internet_on() == False:
         appendFile("codes.txt", code)
         print("Added code to codes.txt")
     else:
@@ -333,11 +333,12 @@ def compareCodes(filename, codelist):
                 if lower == line2:
                     count += 1
     if count >= 1:
-        print("Ten sam kod")
+        print("Wygenerowano nowy kod")
         return True
     else:
-        print("Wygenerowano nowy kod")
+        print("Nie znaleziono podobnego kodu")
         return False
+        
         
 def generateListOfCodes(fileName):
     listOfCodes = []
@@ -347,12 +348,29 @@ def generateListOfCodes(fileName):
     for sentance in read:
         line = sentance.split()
         for each in line:
-            line2 = each.lower()
+            line2 = each.upper()
             line2 = line2.strip("!@#$%^&*(()_+=")
             listOfCodes.append(line2)
             print(listOfCodes[-1])
+    return listOfCodes
             
-
+def sendArchivedPhotos():
+    print("sendArchivedPhotos zaczyna dzialac")
+    list = generateListOfCodes("code.txt")
+    for i in list:
+        element = list[3]
+        print(list[3])
+        if compareCodes("codes.txt", [element]) == False:
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/1.jpg" % (element), element)
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/2.jpg" % (element), element)
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/3.jpg" % (element), element)
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/4.jpg" % (element), element)
+            appendFile("codes.txt", element)
+            print("wysylanie zakonczone")
+        else:
+            print("Ten folder juz wyslano")
+        
+    
 def montage():
     subprocess.call(["montage",
                  IMG1, IMG2, IMG3,
@@ -364,7 +382,7 @@ def montage():
 
 
 def play():
-    generateListOfCodes("code.txt")
+    sendArchivedPhotos()
     catalogName = time.strftime("%Y%m%d-%H%M%S")
 
     fileName = catalogName +".jpg"
@@ -395,7 +413,7 @@ def play():
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
     
-    if internet_on() == True:
+    if internet_on() == False:
         print("Internet ON")
         send(catalogName, code)
         archiveImage(catalogName, "photos/")
