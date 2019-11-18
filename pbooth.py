@@ -81,7 +81,8 @@ def codeGenerate():
             logging.info("Generate new code")
     #logging.info(code)
     
-    if internet_on() == False:
+    if internet_on() == True:
+        appendFile("codes.txt", code)
         print("Added code to codes.txt")
     else:
         print("Added code to code.txt")
@@ -318,7 +319,6 @@ def remove_overlays(camera):
 
 
 def compareCodes(filename, codelist):
-
     file = open(filename, "r")
     read = file.readlines()
     file.close()
@@ -333,9 +333,25 @@ def compareCodes(filename, codelist):
                 if lower == line2:
                     count += 1
     if count >= 1:
+        print("Ten sam kod")
         return True
     else:
+        print("Wygenerowano nowy kod")
         return False
+        
+def generateListOfCodes(fileName):
+    listOfCodes = []
+    file = open(fileName, "r")
+    read = file.readlines()
+    file.close()
+    for sentance in read:
+        line = sentance.split()
+        for each in line:
+            line2 = each.lower()
+            line2 = line2.strip("!@#$%^&*(()_+=")
+            listOfCodes.append(line2)
+            print(listOfCodes[-1])
+            
 
 def montage():
     subprocess.call(["montage",
@@ -348,7 +364,7 @@ def montage():
 
 
 def play():
-
+    generateListOfCodes("code.txt")
     catalogName = time.strftime("%Y%m%d-%H%M%S")
 
     fileName = catalogName +".jpg"
@@ -379,7 +395,7 @@ def play():
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
     
-    if internet_on() == False:
+    if internet_on() == True:
         print("Internet ON")
         send(catalogName, code)
         archiveImage(catalogName, "photos/")
@@ -402,6 +418,7 @@ def send(catalogName, code):
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
     sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/4.jpg", code)
+    
 
 
 def presentation():
