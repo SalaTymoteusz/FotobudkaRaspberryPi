@@ -81,7 +81,7 @@ def codeGenerate():
             logging.info("Generate new code")
     #logging.info(code)
     
-    if internet_on() == False:
+    if internet_on() == True:
         appendFile("codes.txt", code)
         print("Added code to codes.txt")
     else:
@@ -357,9 +357,10 @@ def generateListOfCodes(fileName):
 def sendArchivedPhotos():
     print("sendArchivedPhotos zaczyna dzialac")
     list = generateListOfCodes("code.txt")
-    for i in list:
-        element = list[3]
-        print(list[3])
+    i = 0
+    while i < len(list):
+        element = list[i]
+        print(list[i])
         if compareCodes("codes.txt", [element]) == False:
             sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/1.jpg" % (element), element)
             sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/2.jpg" % (element), element)
@@ -369,6 +370,7 @@ def sendArchivedPhotos():
             print("wysylanie zakonczone")
         else:
             print("Ten folder juz wyslano")
+        i += 1
         
     
 def montage():
@@ -382,7 +384,9 @@ def montage():
 
 
 def play():
-    sendArchivedPhotos()
+    if internet_on() == True:
+        sendArchivedPhotos()
+        
     catalogName = time.strftime("%Y%m%d-%H%M%S")
 
     fileName = catalogName +".jpg"
@@ -413,7 +417,7 @@ def play():
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
     
-    if internet_on() == False:
+    if internet_on() == True:
         print("Internet ON")
         send(catalogName, code)
         archiveImage(catalogName, "photos/")
