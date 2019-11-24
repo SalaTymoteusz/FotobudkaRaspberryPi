@@ -35,9 +35,10 @@ if($mysql->connect_error){
         $mysql->query($sql_insert_series);
         
         if (!file_exists("./photos" .  "/" . $series_code)) {
-         mkdir("./photos" .  "/" . $series_code, 0777, true);
+         mkdir("/photos" .  "/" . $series_code, 0777, true);
 }
         
+        var_dump($mysql->query($sql_insert_series));
         
         
         $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
