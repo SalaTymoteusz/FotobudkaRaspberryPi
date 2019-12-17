@@ -1,7 +1,7 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST');
+header('Access-Control-Allow-Methods: POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 
 define("SERVER", "localhost");
@@ -16,7 +16,9 @@ if($mysql->connect_error){
     $response["STATUS"] = 500;
 }else{
         echo 'polaczono z baza' . PHP_EOL;
-    
+
+	var_dump($_POST);    
+
      if ($_POST['session']){
         $session = $_POST['session'];
          
@@ -46,6 +48,7 @@ if($mysql->connect_error){
      }else{
             $response['MESSAGE'] = 'INVALID REQUEST';
             $response['STATUS'] = 400;
+	    $response['POST'] = $_POST['session'];
         }
     
     

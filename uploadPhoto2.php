@@ -28,25 +28,43 @@ if($mysql->connect_error){
             $series_code = $_POST['series_code'];
             $session = $_POST['session'];
             
+            var_dump($series_code);
+            
               $sql_select_session = "SELECT session_id FROM sessions WHERE session_name ='" . $session . "'";
               var_dump($sql_select_session);
               $result = $mysql->query($sql_select_session);
               var_dump($result);
               $row =  $result->fetch_assoc();
-                $session_id = $row['session_id'];
+              $session_id = $row['session_id'];
             
              if (!empty($row)){ // != false - nie ma zadnego
                  
-                 $sql_insert_series = "INSERT INTO series (series_code) VALUES ('{$series_code}')";
-                $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
+              $sql_insert_series = "INSERT INTO series (series_code) VALUES ('{$series_code}')";
+                 
+                if($mysql->query($sql_insert_series)){
+                $sql_status = true;
+                  echo 'Wpis do bazy danych wykonał się pomyślnie'  . $sql_insert_series . PHP_EOL;
+                }else{
+                  echo 'Błąd w zapytaniu SQL - ' . $sql_insert_series . PHP_EOL;
+                }     
+                 
+              $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
               var_dump($sql_select_series);
               $result = $mysql->query($sql_select_series);
               var_dump($result);
               $row =  $result->fetch_assoc();
-                $series_id = $row['series_id'];
+              $series_id = $row['series_id'];
                  
-                  $sql_insert_series_to_session = "INSERT INTO series_to_session (session_id. series_id) VALUES ({$session_id}, {$series_id})";
-                  $upload_dir= "./sessions" .  "/" . $session . "/" . $series_code . "/" . $photo_name;
+              $sql_insert_series_to_session = "INSERT INTO series_to_session (session_id, series_id) VALUES ({$session_id}, {$series_id})";
+                 
+                if($mysql->query($sql_insert_series_to_session)){
+                $sql_status = true;
+                  echo 'Wpis do bazy danych wykonał się pomyślnie'  . $sql_insert_series_to_session . PHP_EOL;
+                }else{
+                  echo 'Błąd w zapytaniu SQL - ' . $sql_insert_series_to_session . PHP_EOL;
+                }         
+                 
+              $upload_dir= "./sessions" .  "/" . $session . "/" . $series_code . "/" . $photo_name;
                  
                 if (!file_exists("./sessions" .  "/" . $session . "/" . $series_code)) {
                 mkdir("./sessions" .  "/" . $session . "/" . $series_code, 0777, true);
@@ -77,9 +95,11 @@ if($mysql->connect_error){
                 $response['MESSAGE'] = 'SESSION DOESNT EXIST';
                 $response['STATUS'] = 400; 
              }
+            
+        }
 
 
-        if ( !$_POST['session'] && $_POST['series_code'] && $_FILES['photo']['tmp_name']){
+        else if ( !$_POST['session'] && $_POST['series_code'] && $_FILES['photo']['tmp_name']){
         
         $tmp_file = file_get_contents($_FILES['photo']['tmp_name']);
         $photo_name = $_FILES['photo']['name'];
@@ -129,12 +149,14 @@ if($mysql->connect_error){
             $response['MESSAGE'] = 'UPLOAD FAILED';
             $response['STATUS'] = 404;
         }
-        }else{    
+        }
+    
+    
+        else{    
         $response['MESSAGE'] = 'INVALID REQUEST';
         $response['STATUS'] = 400;
         }
 
 }
     echo json_encode($response);
-}
 ?>
