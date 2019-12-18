@@ -16,7 +16,7 @@ if ($mysql->connect_error) {
     $response["MESSAGE"] = "SERVER ERROR - CANNOT CONNECT WITH DB";
     $response["STATUS"] = 500;
 } else {
-    echo 'polaczono z baza' . PHP_EOL;
+//    echo 'polaczono z baza' . PHP_EOL;
 
     $sql = "SELECT photobooth_active_session_id FROM photobooth WHERE photobooth_id = 1";
 
@@ -24,11 +24,13 @@ if ($mysql->connect_error) {
     $row =  $result->fetch_assoc();
     $active_session_id = $row['photobooth_active_session_id'];
 
-    $data = array();
+    $datas = array();
 
     $data['session_id'] = $active_session_id;
+    array_push($datas, $data);
+    
+    echo json_encode($datas);
 
-    var_dump($data);
-    return json_encode($data);
+    return json_encode($datas);
 }
 

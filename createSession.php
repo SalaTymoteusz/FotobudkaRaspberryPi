@@ -15,9 +15,9 @@ if($mysql->connect_error){
     $response["MESSAGE"] = "SERVER ERROR - CANNOT CONNECT WITH DB";
     $response["STATUS"] = 500;
 }else{
-        echo 'polaczono z baza' . PHP_EOL;
+//        echo 'polaczono z baza' . PHP_EOL;
 
-	var_dump($_POST);    
+//	var_dump($_POST);    
 
      if ($_POST['session'] && $_POST['user_id']){
         $session = $_POST['session'];
@@ -25,8 +25,11 @@ if($mysql->connect_error){
          
          
         $sql_select_session = "SELECT session_id FROM sessions WHERE session_name ='" . $session . "'";
+        var_dump($sql_select_session);
         $result = $mysql->query($sql_select_session);
+        var_dump($result);
         $row =  $result->fetch_assoc();
+         var_dump($row);
          if (!empty($row)){ // != false - nie ma zadnego
              
               $response['MESSAGE'] = 'SESSION ALREADY EXIST';

@@ -15,23 +15,28 @@ if($mysql->connect_error){
     $response["MESSAGE"] = "SERVER ERROR - CANNOT CONNECT WITH DB";
     $response["STATUS"] = 500;
 }else{
-	echo 'polaczono z baza' . PHP_EOL;
+
+//	echo 'polaczono z baza' . PHP_EOL;
 	//var_dump($_FILES['photo']);
 	//var_dump($_FILES['photo']['tmp_name']);
 	//var_dump($_FILES['photo']['name']);
 
 
-        if ($_POST['session'] && $_POST['series_code'] && $_FILES['photo']['tmp_name']){
+        if ($_POST['session_id'] && $_POST['series_code'] && $_FILES['photo']['tmp_name']){
             
             $tmp_file = file_get_contents($_FILES['photo']['tmp_name']);
             $photo_name = $_FILES['photo']['name'];
             $series_code = $_POST['series_code'];
-            $session = $_POST['session'];
-
-              $sql_select_session = "SELECT session_id FROM sessions WHERE session_name ='" . $session . "'";
+            $session_id = $_POST['session_id'];
+            
+            var_dump($series_code);
+            
+            
+              $sql_select_session = "SELECT session_name FROM sessions WHERE session_id ='" . $session_id . "'";
               $result = $mysql->query($sql_select_session);
               $row =  $result->fetch_assoc();
-              $session_id = $row['session_id'];
+              $session = $row['session_name'];
+                
             
              if (!empty($row)){ // != false - nie ma zadnego
                  
@@ -45,7 +50,9 @@ if($mysql->connect_error){
                 }     
                  
               $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
+              var_dump($sql_select_series);
               $result = $mysql->query($sql_select_series);
+              var_dump($result);
               $row =  $result->fetch_assoc();
               $series_id = $row['series_id'];
                  
@@ -115,6 +122,8 @@ if($mysql->connect_error){
         
         $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
         $result = $mysql->query($sql_select_series);
+        var_dump( $sql_select_series);
+        var_dump( $result);
         $row =  $result->fetch_assoc();
         
          

@@ -15,7 +15,7 @@ if ($mysql->connect_error) {
     $response["MESSAGE"] = "SERVER ERROR - CANNOT CONNECT WITH DB";
     $response["STATUS"] = 500;
 } else {
-    echo 'polaczono z baza' . PHP_EOL;
+//    echo 'polaczono z baza' . PHP_EOL;
 
     if ($_GET["user_id"]){
         $user_id = $_GET["user_id"];
