@@ -19,7 +19,7 @@ if ($mysql->connect_error) {
 } else {
     //echo 'polaczono z baza' . PHP_EOL;
 
-    $sql = "SELECT session_id, session_name FROM sessions";
+    $sql = "SELECT session_id, session_name, session_user_id FROM sessions";
 
     $result = $mysql->query($sql);
     
@@ -30,7 +30,7 @@ if ($mysql->connect_error) {
 
     $data['session_id'] = $row['session_id'];
     $data['session_name'] = $row['session_name'];
-        
+    $data['session_user_id'] =  $row['session_user_id'];
     array_push($datas, $data);
     }
                                
