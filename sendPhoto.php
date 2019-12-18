@@ -10,7 +10,7 @@ if( $opendir = opendir($dir)){
 
 $file = file_get_contents(__DIR__ . '/photos/' .$file_to_send);
 
-$url = "https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php";
+$url = "https://fotobudka.projektstudencki.pl/uploadPhoto.php";
 //$filename = $_FILES['file']['name'];
 //$filedata = $file_to_send;
 //$filesize = filesize($dir . $file_to_send);
@@ -49,3 +49,4 @@ $url = "https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php";
 //{
 //    $errmsg = "Please select the file";
 //}
+

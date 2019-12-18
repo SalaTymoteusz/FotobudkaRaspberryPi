@@ -1,13 +1,16 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: X-Requested-With");
+
 define("SERVER", "localhost");
-define("USER", "id9844448_fotobudka");
-define("PASSWORD", "fotobudka");
-define("DB", "id9844448_fotobudka");
+define("USER", "tomasz");
+define("PASSWORD", "1qaZXsw2");
+define("DB", "fotobudka");
 
 $mysql = new mysqli(SERVER,USER,PASSWORD,DB);
-
 $response = array();
-
 if($mysql->connect_error){
     $response["MESSAGE"] = "SERVER ERROR - CANNOT CONNECT WITH DB";
     $response["STATUS"] = 500;
@@ -32,7 +35,7 @@ if($mysql->connect_error){
         $mysql->query($sql_insert_series);
         
         if (!file_exists("./photos" .  "/" . $series_code)) {
-         mkdir("./photos" .  "/" . $series_code, 0777, true);
+         mkdir("/photos" .  "/" . $series_code, 0777, true);
 }
         
         var_dump($mysql->query($sql_insert_series));
@@ -45,7 +48,7 @@ if($mysql->connect_error){
         $row =  $result->fetch_assoc();
         
          
-        $sql = "INSERT INTO Photos (name, code, series_id) VALUES ('{$photo_name}', '{$_POST['code']}', {$row['series_id']})";
+        $sql = "INSERT INTO Photos (name, series_code, series_id) VALUES ('{$photo_name}', '{$_POST['series_code']}', {$row['series_id']})";
         //echo $sql;
         
         if(file_put_contents($upload_dir, $tmp_file)){
@@ -54,7 +57,6 @@ if($mysql->connect_error){
         }else{
             echo 'Plik nie został pomyślnie zuploadowany :(' . PHP_EOL;
         }
-
         if($mysql->query($sql)){
             $sql_status = true;
             echo 'Wpis do bazy danych wykonał się pomyślnie'  . $sql . PHP_EOL;
@@ -65,17 +67,14 @@ if($mysql->connect_error){
         if($upload_status && $sql_status){
             $response['MESSAGE'] = 'UPLOAD SUCCED';
             $response['STATUS'] = 200;
-
         }else{
             $response['MESSAGE'] = 'UPLOAD FAILED';
             $response['STATUS'] = 404;
         }
-
         }else{    
         $response['MESSAGE'] = 'INVALID REQUEST';
         $response['STATUS'] = 400;
         }
-
 echo json_encode($response);
 }
 ?>
