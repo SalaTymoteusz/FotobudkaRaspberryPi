@@ -27,13 +27,9 @@ if($mysql->connect_error){
             $photo_name = $_FILES['photo']['name'];
             $series_code = $_POST['series_code'];
             $session = $_POST['session'];
-            
-            var_dump($series_code);
-            
+
               $sql_select_session = "SELECT session_id FROM sessions WHERE session_name ='" . $session . "'";
-              var_dump($sql_select_session);
               $result = $mysql->query($sql_select_session);
-              var_dump($result);
               $row =  $result->fetch_assoc();
               $session_id = $row['session_id'];
             
@@ -49,9 +45,7 @@ if($mysql->connect_error){
                 }     
                  
               $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
-              var_dump($sql_select_series);
               $result = $mysql->query($sql_select_series);
-              var_dump($result);
               $row =  $result->fetch_assoc();
               $series_id = $row['series_id'];
                  
@@ -121,8 +115,6 @@ if($mysql->connect_error){
         
         $sql_select_series = "SELECT series_id FROM series WHERE series_code ='" . $series_code . "'";
         $result = $mysql->query($sql_select_series);
-        var_dump( $sql_select_series);
-        var_dump( $result);
         $row =  $result->fetch_assoc();
         
          

@@ -19,23 +19,21 @@ if($mysql->connect_error){
 
 	var_dump($_POST);    
 
-     if ($_POST['session']){
+     if ($_POST['session'] && $_POST['user_id']){
         $session = $_POST['session'];
+        $user_id = $_POST['user_id'];
          
          
         $sql_select_session = "SELECT session_id FROM sessions WHERE session_name ='" . $session . "'";
-        var_dump($sql_select_session);
         $result = $mysql->query($sql_select_session);
-        var_dump($result);
         $row =  $result->fetch_assoc();
-         var_dump($row);
          if (!empty($row)){ // != false - nie ma zadnego
              
               $response['MESSAGE'] = 'SESSION ALREADY EXIST';
               $response['STATUS'] = 404;
              
          }else{
-                $sql_insert_session = "INSERT INTO sessions (session_name) VALUES ('{$session}')";
+                $sql_insert_session = "INSERT INTO sessions (session_name, session_user_id) VALUES ('{$session}', '{$user_id}')";
                 $mysql->query($sql_insert_session);
                 
                  if (!file_exists("./sessions" .  "/" . $session)) {
