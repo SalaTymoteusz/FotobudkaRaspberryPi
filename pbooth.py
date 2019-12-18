@@ -9,7 +9,6 @@ import picamera
 import itertools
 import cups
 import subprocess
-import os
 from shutil import copyfile
 import sys
 import time
@@ -20,6 +19,10 @@ from PIL import Image, ImageDraw, ImageFont
 #from resizeimage import resizeimage
 import os
 import shutil
+import png
+import pyqrcode
+import urllib2
+import os.path
 
 IMG1             = "1.jpg"
 IMG2             = "2.jpg"
@@ -44,6 +47,13 @@ CODE = ""
 #setup GPIOs
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+def internet_on():
+    try:
+        urllib2.urlopen('http://216.58.192.142', timeout=1)
+        return True
+    except urllib2.URLError as err:
+        return False
 
 
 def sendImage(url, imgPath, series_code):
@@ -70,21 +80,56 @@ def codeGenerate():
             x = compareCodes("/usr/local/src/boothy/codes.txt", [code])
             logging.info("Generate new code")
     #logging.info(code)
-    appendFile("codes.txt", code)
+    
+    if internet_on() == True:
+        appendFile("codes.txt", code)
+        print("Added code to codes.txt")
+    else:
+        print("Added code to code.txt")
+        appendFile("code.txt", code)
     return code
 
 #merges the 4 images
-def convertMergeImages(fileName):
-
-    showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName)
+def convertMergeImages(fileName, code):
+    showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName, code)
 
     # addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
 
     #now merge all the images
 
+def showQrcode():
+ # Load the arbitrarily sized image
+    img = Image.open('/usr/local/src/boothy/code.png')
+    # Create an image padded to the required size with
+    # mode 'RGB'
+    pad = Image.new('RGBA', (
+        ((img.size[0] + 24) // 32) * 32,
+        ((img.size[1] + 8) // 16) * 16,
+        ))
+    # Paste the original image into the padded one
+    pad.paste(img, (0, 0))
+
+    # Add the overlay with the padded image as the source,
+    # but the original image's dimensions
+
+    o = camera.add_overlay(pad.tobytes(), size=img.size)
+    # By default, the overlay is in layer 0, beneath the
+    # preview (which defaults to layer 2). Here we make
+    # the new overlay semi-transparent, then move it above
+    # the preview
+    o.alpha = 255
+    o.alpha = 255
+    o.layer = 3
+    time.sleep(5)
+
+    camera.remove_overlay(o)
+
+def generateQRCode(code):
+    big_code = pyqrcode.create(code, error='L', version=None, mode='binary')
+    big_code.png('code.png', scale=8, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
 
 
-def deleteImages(fileName):
+def deleteImages():
     logging.info("Deleting any old images.")
     if os.path.isfile(IMG1):
         os.remove(IMG1)
@@ -92,38 +137,37 @@ def deleteImages(fileName):
         os.remove(IMG2)
     if os.path.isfile(IMG3):
         os.remove(IMG3)
-    if os.path.isfile("1r.jpg"):
+    if os.path.isfile("1.jpg"):
         os.remove("1r.jpg")
-    if os.path.isfile("2r.jpg"):
+    if os.path.isfile("2.jpg"):
         os.remove("2r.jpg")
-    if os.path.isfile("3r.jpg"):
+    if os.path.isfile("3.jpg"):
         os.remove("3r.jpg")
-    if os.path.isfile(fileName):
-        os.remove(fileName)
+    if os.path.isfile("4.jpg"):
+        os.remove("4r.jpg")
 
 def cleanUp():
     GPIO.cleanup()
 
-def archiveImage(fileName, catalogName):
-    logging.info("Saving off image: " + fileName)
+def archiveImage(catalogName, path):
+    logging.info("Saving off image: " + catalogName)
 
-    if not os.path.exists("photos/" + catalogName):
-        os.makedirs("photos/" + catalogName)
-        shutil.move(fileName, "photos/" + catalogName)
-        shutil.move("1.jpg", "photos/" + catalogName)
-        shutil.move("2.jpg", "photos/" + catalogName)
-        shutil.move("3.jpg", "photos/" + catalogName)
-
+    if not os.path.exists(path + catalogName):
+        os.makedirs(path + catalogName)
+        shutil.move("1.jpg", path + catalogName)
+        shutil.move("2.jpg", path + catalogName)
+        shutil.move("3.jpg", path + catalogName)
+        shutil.move("4.jpg", path + catalogName)
 
     else:
-        shutil.move(fileName, "photos/" + catalogName)
-        shutil.move("1.jpg", "photos/" + catalogName)
-        shutil.move("2.jpg", "photos/" + catalogName)
-        shutil.move("3.jpg", "photos/" + catalogName)
+        shutil.move("1.jpg", path + catalogName)
+        shutil.move("2.jpg", path + catalogName)
+        shutil.move("3.jpg", path + catalogName)
+        shutil.move("4.jpg", path + catalogName)
 
 
 
-    logging.info("copy image: " + fileName)
+    logging.info("copy image: " + catalogName)
 
 
 def countdownFrom(secondsStr):
@@ -172,7 +216,7 @@ def showImage(path, x, y, remove, presentation_time):
 
 
 
-def showImage2(path, x, y, remove, fileName):
+def showImage2(path, x, y, remove, fileName, code):
 
  # Load the arbitrarily sized image
     img = Image.open(path)
@@ -197,28 +241,12 @@ def showImage2(path, x, y, remove, fileName):
     o.layer = 3
 
 
-    code = codeGenerate()
 
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
-
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
-
-
-    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
-    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
-    #sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
-    print fileName
-    subprocess.call(["montage",
-                 IMG1, IMG2, IMG3,
-                 "-geometry", "+2+1",
-                 fileName])
-    logging.info("Images have been merged.")
-
-    #sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
-    sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php", "/usr/local/src/boothy/%s" % (fileName), code)
-
+    
+    #The assembly process of three photos and delay for showing code
+    montage()
+    
     if remove == True:
           img = Image.new("RGBA", (640, 480))
           overlay_renderer.update(img.tobytes())
@@ -291,7 +319,6 @@ def remove_overlays(camera):
 
 
 def compareCodes(filename, codelist):
-
     file = open(filename, "r")
     read = file.readlines()
     file.close()
@@ -306,17 +333,60 @@ def compareCodes(filename, codelist):
                 if lower == line2:
                     count += 1
     if count >= 1:
+        print("Wygenerowano nowy kod")
         return True
     else:
+        print("Nie znaleziono podobnego kodu")
         return False
-
-
+        
+        
+def generateListOfCodes(fileName):
+    listOfCodes = []
+    file = open(fileName, "r")
+    read = file.readlines()
+    file.close()
+    for sentance in read:
+        line = sentance.split()
+        for each in line:
+            line2 = each.upper()
+            line2 = line2.strip("!@#$%^&*(()_+=")
+            listOfCodes.append(line2)
+            print(listOfCodes[-1])
+    return listOfCodes
+            
+def sendArchivedPhotos():
+    print("sendArchivedPhotos zaczyna dzialac")
+    list = generateListOfCodes("code.txt")
+    i = 0
+    while i < len(list):
+        element = list[i]
+        print(list[i])
+        if compareCodes("codes.txt", [element]) == False:
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/1.jpg" % (element), element)
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/2.jpg" % (element), element)
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/3.jpg" % (element), element)
+            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/4.jpg" % (element), element)
+            appendFile("codes.txt", element)
+            print("wysylanie zakonczone")
+        else:
+            print("Ten folder juz wyslano")
+        i += 1
+        
+    
+def montage():
+    subprocess.call(["montage",
+                 IMG1, IMG2, IMG3,
+                 "-geometry", "+2+1",
+                 "4.jpg"])
+    logging.info("Images have been merged.")
 
 
 
 
 def play():
-
+    if internet_on() == True:
+        sendArchivedPhotos()
+        
     catalogName = time.strftime("%Y%m%d-%H%M%S")
 
     fileName = catalogName +".jpg"
@@ -337,13 +407,41 @@ def play():
 
     addPreviewOverlay2(150,200,100,"KONIEC")
 
-    presentation()
+    #presentation()
+    #present QRCode
+    generateQRCode(code)
+    showQrcode()
+    os.remove('code.png')
+    convertMergeImages(fileName, code)
+#    send(fileName, code)
+#    archiveImage(fileName, catalogName, "photos/")
+#    deleteImages(fileName)
+    
+    if internet_on() == True:
+        print("Internet ON")
+        send(catalogName, code)
+        archiveImage(catalogName, "photos/")
+        deleteImages()
+    else:
+        print("Internet OFF")
+        destination = '/usr/local/src/boothy/toSend/'
+        archiveImage(code, destination)
+        deleteImages()
 
+#def saveToFile(code):
+#    path = "/usr/local/src/boothy/code.txt"
+#    print(path)
+#    file = open(path, 'w')
+#    file.write(code)
+#    file.close()
 
-    convertMergeImages(fileName)
-    archiveImage(fileName, catalogName)
+def send(catalogName, code):
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
+    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/4.jpg", code)
+    
 
-    deleteImages(fileName)
 
 def presentation():
 
