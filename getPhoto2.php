@@ -70,7 +70,11 @@ return json_encode($datas);
     else if ( $_GET["session_id"]){
         
         $session_id = $_GET["session_id"];
-        
+
+        $sql = 'SELECT  session_name FROM sessions where session_id ="'.  $session_id . '"';
+        $result = $mysql->query($sql);
+        $row = $result->fetch_assoc();
+        $session_name = $row['session_name'];
         
         $sql = 'SELECT DISTINCT series_id FROM series_to_session where session_id ="'.  $session_id . '"';
         $result = $mysql->query($sql);
@@ -91,7 +95,7 @@ return json_encode($datas);
             $sql = 'SELECT series_code, name, series_id, photo_id FROM Photos where series_id ='.  $serial['series_id'];
             $result = $mysql->query($sql);
             while($row = $result->fetch_assoc()){
-            $photo_url = 'http://fotobudkaraspberry.pl/sessions/' . $session . "/" .  $row['series_code'] . "/" . $row['name'];
+            $photo_url = 'http://fotobudkaraspberry.pl/sessions/' . $session_name . "/" .  $row['series_code'] . "/" . $row['name'];
             $data['url'] = $photo_url;
             $data['id'] = $row['photo_id'];
             $data['album_id'] = $row['series_id'];
