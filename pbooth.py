@@ -57,9 +57,15 @@ def internet_on():
 
 
 def sendImage(url, imgPath, series_code):
-
+    r = requests.get("https://fotobudkaraspberry.pl/getActiveSession.php")
+    r.json()
+    print('########')
+    session_id = ''.join(filter(lambda i: i.isdigit(), r.content))
+    session_id = str(session_id)
+    print(session_id)
+    print('########')
     files = {'photo': open("%s" % (imgPath), 'rb')}
-    payload = {'series_code': series_code}
+    payload = {'series_code': series_code, 'session_id': session_id}
 
     response = requests.request("POST", url, data=payload, files=files)
     print(response.url)
@@ -80,7 +86,7 @@ def codeGenerate():
             x = compareCodes("/usr/local/src/boothy/codes.txt", [code])
             logging.info("Generate new code")
     #logging.info(code)
-    
+
     if internet_on() == True:
         appendFile("codes.txt", code)
         print("Added code to codes.txt")
@@ -243,10 +249,10 @@ def showImage2(path, x, y, remove, fileName, code):
 
 
     addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
-    
+
     #The assembly process of three photos and delay for showing code
     montage()
-    
+
     if remove == True:
           img = Image.new("RGBA", (640, 480))
           overlay_renderer.update(img.tobytes())
@@ -338,8 +344,8 @@ def compareCodes(filename, codelist):
     else:
         print("Nie znaleziono podobnego kodu")
         return False
-        
-        
+
+
 def generateListOfCodes(fileName):
     listOfCodes = []
     file = open(fileName, "r")
@@ -353,7 +359,7 @@ def generateListOfCodes(fileName):
             listOfCodes.append(line2)
             print(listOfCodes[-1])
     return listOfCodes
-            
+
 def sendArchivedPhotos():
     print("sendArchivedPhotos zaczyna dzialac")
     list = generateListOfCodes("code.txt")
@@ -362,17 +368,17 @@ def sendArchivedPhotos():
         element = list[i]
         print(list[i])
         if compareCodes("codes.txt", [element]) == False:
-            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/1.jpg" % (element), element)
-            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/2.jpg" % (element), element)
-            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/3.jpg" % (element), element)
-            sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/toSend/%s/4.jpg" % (element), element)
+            sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/toSend/%s/1.jpg" % (element), element)
+            sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/toSend/%s/2.jpg" % (element), element)
+            sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/toSend/%s/3.jpg" % (element), element)
+            sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/toSend/%s/4.jpg" % (element), element)
             appendFile("codes.txt", element)
             print("wysylanie zakonczone")
         else:
             print("Ten folder juz wyslano")
         i += 1
-        
-    
+
+
 def montage():
     subprocess.call(["montage",
                  IMG1, IMG2, IMG3,
@@ -384,9 +390,16 @@ def montage():
 
 
 def play():
+    #contents = urllib2.urlopen("https://fotobudkaraspberry.pl/getActiveSession.php").read()
+    #print("##########")
+    #print(contents)
+    #print("##########")
+
+
+
     if internet_on() == True:
         sendArchivedPhotos()
-        
+
     catalogName = time.strftime("%Y%m%d-%H%M%S")
 
     fileName = catalogName +".jpg"
@@ -416,7 +429,7 @@ def play():
 #    send(fileName, code)
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
-    
+
     if internet_on() == True:
         print("Internet ON")
         send(catalogName, code)
@@ -436,11 +449,11 @@ def play():
 #    file.close()
 
 def send(catalogName, code):
-    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/1.jpg", code)
-    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/2.jpg", code)
-    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/3.jpg", code)
-    sendImage("https://fotobudka.projektstudencki.pl/uploadPhoto.php", "/usr/local/src/boothy/4.jpg", code)
-    
+    sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/1.jpg", code)
+    sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/2.jpg", code)
+    sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/3.jpg", code)
+    sendImage("https://fotobudkaraspberry.pl/uploadPhoto2.php", "/usr/local/src/boothy/4.jpg", code)
+
 
 
 def presentation():
