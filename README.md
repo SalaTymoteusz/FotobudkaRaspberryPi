@@ -31,7 +31,7 @@ Baza danych
 ```
 fotobudkaraspberry.pl/phpmyadmin
 ```
-Login tomasz i hasło 1qaZXsw2
+Login tomasz i hasło ********
 
 Serwer pocztowy
 ```
