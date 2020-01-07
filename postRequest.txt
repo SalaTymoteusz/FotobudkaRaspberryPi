@@ -1,0 +1,11 @@
+def sendImage(url, code, imgPath, series_code):
+
+    files = {'photo': open("%s" % (imgPath), 'rb')}
+    payload = {'code': code, 'series_code': series_code}
+
+    response = requests.request("POST", url, data=payload, files=files)
+    print(response.url)
+    print(response.text)
+
+
+sendImage("https://fotobudkaraspberry.000webhostapp.com/uploadPhoto.php","GGGGG", "IMG_6750.JPG", "1")
