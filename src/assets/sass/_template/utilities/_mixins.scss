@@ -1,0 +1,109 @@
+@mixin xxxl-up() {
+    @media screen and (min-width: 1650px) {
+        @content;
+    }
+}
+
+@mixin xxl-up() {
+    @media screen and (min-width: 1360px) {
+        @content;
+    }
+}
+
+@mixin xl-up() {
+    @media screen and (min-width: 1200px) {
+        @content;
+    }
+}
+
+@mixin lg-up() {
+    @media screen and (min-width: 992px) {
+        @content;
+    }
+}
+
+@mixin md-up() {
+    @media screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin sm-up() {
+    @media screen and (min-width: 576px) {
+        @content;
+    }
+}
+
+@mixin up($width : 0) {
+    @media screen and (min-width: #{$width}px) {
+        @content;
+    }
+}
+
+
+
+
+@mixin xxl-down() {
+    @media screen and (max-width: 1649px) {
+        @content;
+    }
+}
+
+@mixin xl-down() {
+    @media screen and (max-width: 1349px) {
+        @content;
+    }
+}
+
+@mixin lg-down() {
+    @media screen and (max-width: 1199px) {
+        @content;
+    }
+}
+
+@mixin md-down() {
+    @media screen and (max-width: 991px) {
+        @content;
+    }
+}
+
+@mixin sm-down() {
+    @media screen and (max-width: 767px) {
+        @content;
+    }
+}
+
+@mixin xs-down() {
+    @media screen and (max-width: 575px) {
+        @content;
+    }
+}
+
+@mixin down($width : 0) {
+    @media screen and (max-width: #{$width}px) {
+        @content;
+    }
+}
+
+
+
+
+
+
+@mixin placeholder {
+    &::-webkit-input-placeholder {
+        @content;
+    }
+
+    &:-moz-placeholder {
+        @content;
+    }
+
+    &::-moz-placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
+        @content;
+    }
+}

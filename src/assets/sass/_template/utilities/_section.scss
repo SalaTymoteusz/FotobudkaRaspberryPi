@@ -1,0 +1,144 @@
+.section {
+    padding-top: 4rem;
+    overflow: hidden;
+    width: 100vw;
+    padding-top: 10vw;
+    @include lg-down {
+        padding-top: 6rem;
+    }
+
+    &:nth-child(even){
+        background-color: #122022;
+        *{
+            color:white;
+        }
+        h2{
+            font-size: 3.5rem;
+            font-weight: 700;
+        }
+        p{
+            font-size: 1.5rem;
+        }
+    }
+    &:first-child{
+        background-color: white;
+    }
+
+    .section-desc {
+        margin-top: 14px;
+    }
+}
+
+
+
+
+
+/*=============================================
+=            SECTION DESC          =
+=============================================*/
+
+
+.section-desc {
+
+    &.desc-align-right,
+    &.desc-align-left {
+        width: 1010px;
+        margin-top: 0;
+        max-width: 100%;
+
+
+        @include xl-down {
+            width: 768px;
+        }
+    }
+
+    &.desc-align-right {
+        margin-left: auto;
+    }
+
+    &.desc-align-left {
+        margin-right: auto;
+    }
+}
+
+.section-thumb {
+    position: relative;
+    margin-bottom: 100px;
+    display: flex;
+
+    @include md-down {
+        position: relative;
+        height: 400px;
+    }
+
+    @include xs-down {
+        margin-bottom: 60px;
+        height: 350px;
+    }
+
+    @include down(379) {
+        height: 300px;
+    }
+
+    &.thumb-align-right {
+        justify-content: flex-end;
+
+        &:before {
+            content: "";
+            left: -40px;
+        }
+    }
+
+    &.thumb-align-left {
+        justify-content: flex-start;
+
+        &:before {
+            content: "";
+            right: -40px;
+        }
+    }
+
+    &:before {
+        width: 250px;
+        height: 100%;
+        background-color: $green;
+        position: absolute;
+        bottom: -70px;
+        z-index: -1;
+
+        @include xs-down {
+            bottom: -30px;
+        }
+    }
+
+
+
+    .section-thumb-wrap {
+        width: 100%;
+
+        @include md-down {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+
+            .lazy-container {
+                width: auto;
+                height: 100%;
+            }
+        }
+    }
+
+    img {
+        @include md-down {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: 100%;
+            min-width: 100%;
+            max-width: none;
+            transform: translate(-50%, -50%);
+            width: auto;
+        }
+
+    }
+}

@@ -1,0 +1,10 @@
+@each $class,
+$color in $colors {
+    .text-#{$class} {
+        color: $color;
+    }
+
+    .bg-#{$class} {
+        background-color: $color;
+    }
+}

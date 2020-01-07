@@ -1,0 +1,12 @@
+.section-single_product{
+    figure{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+   @include md-down{
+    .col-12{
+        order: initial !important;
+    }
+   }
+}

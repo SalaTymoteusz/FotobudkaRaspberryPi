@@ -1,0 +1,202 @@
+* {
+    font-family: 'Meticula', 'Helvetica Neue', 'Helvetica', sans-serif;
+    outline: none;
+
+    &:after,
+    &:before {
+        outline: none;
+    }
+}
+
+
+::selection {
+    background: $blue;
+    color: $white;
+}
+
+
+
+body {
+    overflow-x: hidden;
+    position: relative;
+}
+
+
+a {
+    color: $light-blue;
+    transition: color .3s ease;
+
+    &:hover {
+        color: $dark-blue;
+        text-decoration: underline;
+    }
+}
+
+h1 {
+    font-weight: 700;
+}
+
+h2 {
+    font-size: $fz7;
+    color: black;
+    font-weight: $fw_bold;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+
+    @include xxl-down {
+        font-size: $fz7 * 0.9;
+    }
+
+    @include lg-down {
+        font-size: $fz7 * 0.8;
+        margin-bottom: 25px;
+    }
+}
+
+
+
+
+h3 {
+    font-size: $fz8;
+    margin-bottom: 28px;
+    margin-top: 28px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: black;
+
+    @include xxl-down {
+        font-size: $fz8 * 0.9;
+    }
+
+    @include lg-down {
+        font-size: $fz8 * 0.8;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+}
+
+h4 {
+    font-size: $fz9;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 20px;
+
+    @include xxl-down {
+        font-size: $fz9 * 0.9;
+    }
+}
+
+h5 {
+    margin-top: 8px;
+    margin-bottom: 14px;
+    font-size: $fz1;
+    font-weight: $fw-black;
+
+    @include xxl-down {
+        font-size: $fz1 * 0.9;
+    }
+}
+
+
+h6 {
+    margin-bottom: 33px;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+        margin-bottom: 23px;
+    }
+
+    @include lg-down {
+        font-size: $fz0 * 0.8;
+        margin-bottom: 18px;
+    }
+}
+
+p {
+    font-size: $fz0;
+    margin-bottom: 20px;
+    line-height: 1.7em;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+        margin-bottom: 1.5rem;
+    }
+
+    @include lg-down {
+        font-size: $fz0 * 0.8;
+    }
+}
+
+ul,
+ol {
+    margin-bottom: 20px;
+
+    @include xxl-down {
+        font-size: 1.5rem
+    }
+
+}
+
+li {
+    font-size: $fz0;
+    line-height: 1.75em;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+    }
+
+    @include lg-down {
+        font-size: $fz0 * 0.8;
+    }
+}
+
+main {
+    overflow: hidden;
+    position: relative;
+    //margin-top: 80px;
+
+    @include xxl-down {
+        margin-top: 120px;
+    }
+
+    @include lg-down {
+        margin-top: 110px;
+    }
+
+    @include md-down {
+        margin-top: 55px;
+    }
+    @include down(767){
+        margin-top: 40px;
+    }
+ 
+  
+}
+
+address {
+    font-size: $fz0;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+    }
+}
+
+.gmnoprint img {
+    max-width: none;
+}
+
+
+
+.gm-style img {
+    width: auto !important;
+    max-height: 100% !important;
+}
+
+.small-image{
+    height: 50px !important;
+    width: 50px !important;
+}
+
+.login h1 a{
+    background-image: url('/wp-content/uploads/2019/12/rsz_no_contour_transparent-1-2.png') !important;
+}

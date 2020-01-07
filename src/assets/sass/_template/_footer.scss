@@ -1,0 +1,144 @@
+#footer {
+
+    border-top: solid 2px rgba(0,0,0,0.5);
+    padding-top: 3rem;
+    min-height: 300px;
+    background-color: #080E0F;
+    position: relative;
+   
+    i{
+        color : $blue;
+        font-size: 12px;
+    }
+    a {
+        color: $blue;
+        &:hover {
+            color: $dark-blue;
+            text-decoration: underline;
+        }
+    }
+    p, a{
+        margin-bottom: 4px;
+        margin-bottom: 0px;
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    .wedge{
+            position: absolute;
+            top: -3.75rem;
+            width: calc(100% + 1px);
+            height: 4rem;
+            z-index: 1;
+            left: -1px;
+    }
+}
+
+.content-row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+     @include down(767){
+        justify-content: center;
+     }
+    .footer-column{
+        @include down(767){
+            max-width: 200px;
+            justify-content: flex-start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0rem 1rem 2rem;
+        }
+        i{
+            display: none;
+        }
+    }
+}
+
+.social-tiles{
+    display: flex;
+    flex-direction: column;
+    @include down(767){
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+    }
+    a{
+        background-color: black;
+        height: 70px;
+        width: 70px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        transition: all 0.3s ease;
+        margin: 0.2rem 0rem;
+        @include down(767){
+            margin: 0.2rem 0.5rem;
+        }
+        &:hover{
+            background-color: lighten(black, 50%);
+            transition: all 0.3s ease;
+        }
+    }
+}
+
+#back-to-top {
+    position: fixed;
+    z-index: 999;
+    right: 30px;
+    bottom: 30px;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    line-height: 1em;
+    border: 1px solid $green;
+    background-color: rgba($green, 0.75);
+    color: rgba($white, 0.75);
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+
+    &.sticky {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &:hover {
+        background-color: rgba($green, 1);
+        color: rgba($white, 1);
+    }
+
+    @include sm-down {
+        right: 15px;
+        bottom: 15px;
+    }
+}
+
+.fotobudka {
+    font-size: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0px;
+@include down(767){
+    position: relative;
+    margin-top: 1.5rem;
+}
+    .footer-contact & {
+        margin-top: 140px;
+
+        @include lg-down {
+            margin-top: 100px;
+        }
+    }
+
+    @include md-down {
+        text-indent: 0px;
+    }
+}
