@@ -1,0 +1,288 @@
+// BOX COLUMN
+
+
+.boxes-column {
+    position: relative;
+    margin-top: 35px;
+
+    &:after {
+        content: "";
+        position: absolute;
+        left: 15px;
+        bottom: 7px;
+        height: 3px;
+        background-color: $green;
+        width: calc(100% - 30px);
+    }
+
+    .box {
+        padding-bottom: 42px;
+
+        @include down(379) {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        h4 {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-bottom: 20px;
+            margin-bottom: 0;
+        }
+    }
+
+
+    .box-title {
+        padding: 28px 10px;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        @include lg-down {
+            padding: 20px 10px;
+        }
+    }
+
+    .box-link {
+        display: block;
+        width: 100%;
+        transition: background-color 0.3s ease,
+            box-shadow 0.3s ease;
+
+        &:hover {
+            background-color: $gray-dark;
+            box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.025);
+            color: $white;
+            text-decoration: none;
+
+            .box-title {
+                color: inherit;
+            }
+
+            p.box-content {
+                color: inherit;
+            }
+        }
+    }
+
+
+    p.box-content {
+        margin-top: -20px;
+        color: $black;
+        transition: color 0.3s ease;
+
+        @include lg-down {
+            margin-top: -10px;
+        }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .box-circle {
+        position: absolute;
+        background-color: $green;
+        width: 21px;
+        height: 21px;
+        left: 0;
+        bottom: -2px;
+        border-radius: 50%;
+        border: 4px solid $white;
+        z-index: 2;
+        transition: transform 0.3s ease;
+    }
+
+    +.section-more {
+        text-align: center;
+    }
+}
+
+
+
+
+// BOX ROW
+
+.boxes-row {
+    margin-top: 35px;
+
+    .box,
+    .box-link {
+        display: flex;
+        align-items: flex-start;
+        align-content: flex-start;
+        color: inherit;
+
+        @include md-down {
+            flex-wrap: wrap
+        }
+    }
+
+
+    .box-link:hover {
+        text-decoration: none;
+
+        .box-thumbnail {
+            &:before {
+                top: 0px;
+            }
+        }
+
+        .box-content {
+            background-color: $gray-dark;
+            color: $white;
+        }
+    }
+
+    .box {
+        padding-top: 66px;
+
+        &:last-child {
+            padding-bottom: 66px;
+        }
+
+        &:nth-child(even) {
+
+            &,
+            .box-link {
+                @include lg-up {
+                    flex-flow: row-reverse;
+                }
+
+                .box-thumbnail {
+                    margin-right: 0px;
+                    margin-left: -50px;
+                    padding-right: 50px;
+                    padding-left: 0px;
+
+                    @include md-down {
+                        margin-left: auto;
+                    }
+
+                    @include xs-down {
+                        margin-left: -15px;
+                        padding-right: 30px;
+                    }
+
+                    &:before {
+                        left: auto;
+                        right: 0;
+                    }
+                }
+
+                .box-content {
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                    }
+
+                    @include md-down {
+                        margin-left: auto;
+                        margin-right: 110px;
+                    }
+
+                    @include xs-down {
+                        margin-right: 0px;
+                    }
+                }
+            }
+        }
+    }
+
+    .box-thumbnail {
+        position: relative;
+        margin-right: -50px;
+        padding-left: 50px;
+        width: 516px;
+        flex: 0 0 516px;
+
+        @include xs-down {
+            max-width: calc(100% + 30px);
+            margin-left: -15px;
+            margin-right: -15px;
+            padding-left: 30px;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 40px;
+            width: 150px;
+            background-color: $green;
+            height: 100%;
+            z-index: -1;
+            transition: top 0.3s ease;
+
+            @include lg-down {
+                width: 110px;
+            }
+        }
+    }
+
+    .box-content {
+        background-color: $white;
+        z-index: 3;
+        padding: 35px 40px;
+        margin-top: 50px;
+        transition: background-color 0.3s ease;
+
+        @include md-down {
+            padding: 30px 40px;
+            margin-top: -40px;
+            margin-left: 110px;
+        }
+
+        @include xs-down {
+            margin-left: 0px;
+            margin-top: 0px;
+            padding: 30px 15px !important;
+            margin: 0 -15px !important;
+        }
+
+        // * {
+        //     transition: color 0.3s ease;
+        // }
+
+        >*:last-child {
+            margin-bottom: 0 !important;
+        }
+    }
+
+
+    +.section-more {
+        text-align: center;
+    }
+}
+
+
+
+
+.box-title {
+    text-align: center;
+    transition: color 0.3s ease;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.boxes-column-slider {
+    +.box-circle-wrap {
+        position: relative;
+
+        .box-circle {
+            position: absolute;
+            background-color: $green;
+            width: 21px;
+            height: 21px;
+            left: 0;
+            bottom: -2px;
+            border-radius: 50%;
+            border: 4px solid $white;
+            z-index: 2;
+            transform: translateX(-50%);
+        }
+    }
+}

@@ -1,0 +1,65 @@
+// Colors
+
+$gray-light: #EFEFEF;
+$gray: #DEDEDE;
+$green: #b5bd00;
+$gray-dark: #707372;
+$colors: ('gray': $gray,
+    'green': $green,
+    'gray-dark': $gray-dark,
+);
+
+
+
+// Font
+// $font: 'Montserrat';
+$font: 'CenturyGothic';
+
+
+// Font size
+
+
+$fz0: 1rem;
+$fz1: 1.1rem;
+$fz2: 0.85rem;
+$fz3: 1.5rem;
+$fz4: 1.25rem;
+$fz5: 3.25rem;
+$fz6: 2rem;
+$fz7: 2.5rem;
+$fz8: 2rem;
+$fz9: 1.45rem;
+
+
+
+
+// Letter spacing
+$ls0: -0.3px;
+$ls1: 0.03px;
+$ls2: 0.05px;
+$ls3: 0.1px;
+$ls4: 0.2px;
+$ls5: 0.3px;
+$ls6: 0.8px;
+$ls7: 1px;
+
+
+
+
+// Font weight
+$fw-normal: 400;
+$fw-black: 600;
+$fw-bold: 700;
+
+
+$weights: ($fw_normal, $fw_black, $fw_bold);
+
+
+// Line height
+$lh1: 1em;
+$lh2: 1.25em;
+$lh3: 1.3333em;
+$lh4: 1.5em;
+$lh5: 1.6em;
+$lh6: 1.75em;
+$lh7: 2em;
