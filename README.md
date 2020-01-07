@@ -46,13 +46,3 @@ Aktualnie nieskonfigurowane
 fotobudkaraspberry.pl/wp-admin
 ```
 
-
-## Funkcjonalności
-Pobieranie zdjęć z kodu.
-Wyświetlanie galerii po podaniu kody sesji
-
-## Część wizualna 
-- minimalistyczny wygląd
-- monokolorystyczne bloki i elementy
-- responsywność
-- paralaks (w planie)
