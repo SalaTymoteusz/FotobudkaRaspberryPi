@@ -99,36 +99,34 @@ def codeGenerate():
 def convertMergeImages(fileName, code):
     showImage2('/usr/local/src/boothy/noTextLogo.png', 0, 8, True, fileName, code)
 
-    # addPreviewOverlay(250,114,50,"Your code:\n%s \nwww.fotobudka.pl" % (code))
-
     #now merge all the images
 
-def showQrcode():
- # Load the arbitrarily sized image
-    img = Image.open('/usr/local/src/boothy/code.png')
-    # Create an image padded to the required size with
-    # mode 'RGB'
-    pad = Image.new('RGBA', (
-        ((img.size[0] + 24) // 32) * 32,
-        ((img.size[1] + 8) // 16) * 16,
-        ))
-    # Paste the original image into the padded one
-    pad.paste(img, (0, 0))
-
-    # Add the overlay with the padded image as the source,
-    # but the original image's dimensions
-
-    o = camera.add_overlay(pad.tobytes(), size=img.size)
-    # By default, the overlay is in layer 0, beneath the
-    # preview (which defaults to layer 2). Here we make
-    # the new overlay semi-transparent, then move it above
-    # the preview
-    o.alpha = 255
-    o.alpha = 255
-    o.layer = 3
-    time.sleep(5)
-
-    camera.remove_overlay(o)
+#def showQrcode():
+# # Load the arbitrarily sized image
+#    img = Image.open('/usr/local/src/boothy/code.png')
+#    # Create an image padded to the required size with
+#    # mode 'RGB'
+#    pad = Image.new('RGBA', (
+#        ((img.size[0] + 24) // 32) * 32,
+#        ((img.size[1] + 8) // 16) * 16,
+#        ))
+#    # Paste the original image into the padded one
+#    pad.paste(img, (0, 0))
+#
+#    # Add the overlay with the padded image as the source,
+#    # but the original image's dimensions
+#
+#    o = camera.add_overlay(pad.tobytes(), size=img.size)
+#    # By default, the overlay is in layer 0, beneath the
+#    # preview (which defaults to layer 2). Here we make
+#    # the new overlay semi-transparent, then move it above
+#    # the preview
+#    o.alpha = 255
+#    o.alpha = 255
+#    o.layer = 3
+#    time.sleep(5)
+#
+#    camera.remove_overlay(o)
 
 def generateQRCode(code):
     big_code = pyqrcode.create(code, error='L', version=None, mode='binary')
@@ -225,20 +223,25 @@ def showImage(path, x, y, remove, presentation_time):
 def showImage2(path, x, y, remove, fileName, code):
 
  # Load the arbitrarily sized image
-    img = Image.open(path)
+    background = Image.open(path)
+    foreground = Image.open('/usr/local/src/boothy/code.png')
+    
+    background.paste(foreground, (550, 320), foreground.convert('RGBA'))
+    
+    
     # Create an image padded to the required size with
     # mode 'RGB'
     pad = Image.new('RGBA', (
-        ((img.size[0] + x) // 32) * 32,
-        ((img.size[1] + y) // 16) * 16,
+        ((background.size[0] + x) // 32) * 32,
+        ((background.size[1] + y) // 16) * 16,
         ))
     # Paste the original image into the padded one
-    pad.paste(img, (0, 0))
+    pad.paste(background, (0, 0))
 
     # Add the overlay with the padded image as the source,
     # but the original image's dimensions
 
-    o = camera.add_overlay(pad.tobytes(), size=img.size)
+    o = camera.add_overlay(pad.tobytes(), size=background.size)
     # By default, the overlay is in layer 0, beneath the
     # preview (which defaults to layer 2). Here we make
     # the new overlay semi-transparent, then move it above
@@ -247,15 +250,15 @@ def showImage2(path, x, y, remove, fileName, code):
     o.layer = 3
 
 
-
-    addPreviewOverlay(250, 114, 50, "Your code:\n%s \nwww.fotobudka.pl" % (code))
+    #250,144,50
+    addPreviewOverlay(250, 50, 50, "Your code:\n%s" % (code))
 
     #The assembly process of three photos and delay for showing code
     montage()
 
     if remove == True:
-          img = Image.new("RGBA", (640, 480))
-          overlay_renderer.update(img.tobytes())
+          background = Image.new("RGBA", (640, 480))
+          overlay_renderer.update(background.tobytes())
           camera.remove_overlay(o)
 
 
@@ -423,9 +426,8 @@ def play():
     #presentation()
     #present QRCode
     generateQRCode(code)
-    showQrcode()
-    os.remove('code.png')
     convertMergeImages(fileName, code)
+    os.remove('code.png')
 #    send(fileName, code)
 #    archiveImage(fileName, catalogName, "photos/")
 #    deleteImages(fileName)
