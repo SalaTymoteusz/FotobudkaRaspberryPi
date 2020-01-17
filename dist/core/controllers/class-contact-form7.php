@@ -44,16 +44,16 @@ class Contact_Form7 extends Functions{
         wp_enqueue_script('contact-form-7');
 
         $wpcf7 = array(
-            'apiSettings' => array(
-                'root' => esc_url_raw( rest_url( 'contact-form-7/v1' ) ),
-                'namespace' => 'contact-form-7/v1',
-            ),
+        	'apiSettings' => array(
+        		'root' => esc_url_raw( rest_url( 'contact-form-7/v1' ) ),
+        		'namespace' => 'contact-form-7/v1',
+        	),
         );
         if ( defined( 'WP_CACHE' ) and WP_CACHE ) {
-            $wpcf7['cached'] = 1;
+        	$wpcf7['cached'] = 1;
         }
         if ( function_exists('wpcf7_support_html5_fallback') && wpcf7_support_html5_fallback() ) {
-            $wpcf7['jqueryUi'] = 1;
+        	$wpcf7['jqueryUi'] = 1;
         }
         wp_localize_script( 'contact-form-7', 'wpcf7', $wpcf7 );
     }

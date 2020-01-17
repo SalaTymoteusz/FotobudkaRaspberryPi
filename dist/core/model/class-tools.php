@@ -64,13 +64,13 @@ class Tools {
 
 
     public static function get_path_by_url($url, $home) {
-        $path = ABSPATH . str_replace($home, '', $url);
-        $_p = strpos($path, '?');
-        if ($_p !== false) {
-            $path = substr($path, 0, $_p);
-        }
-        return $path;
-    }
+		$path = ABSPATH . str_replace($home, '', $url);
+		$_p = strpos($path, '?');
+		if ($_p !== false) {
+			$path = substr($path, 0, $_p);
+		}
+		return $path;
+	}
 
 
 
@@ -112,11 +112,11 @@ class Tools {
                 $url = 'https:' . $url;
             else
                 $url = 'http:' . $url;
-        }        
+        }	    
         
         if (substr($url, 0, 1) == '/') {
             $url = site_url($url);
-        }    
+        }	
         
         return $url;
     }
