@@ -2,9 +2,9 @@
 
 namespace WTM;
 
- //ini_set('display_errors', 1);
- //ini_set('display_startup_errors', 1);
- //error_reporting(E_ALL);
+ ini_set('display_errors', 1);
+ ini_set('display_startup_errors', 1);
+ error_reporting(E_ALL);
 
 if (!defined('ABSPATH')) exit;
 
@@ -115,7 +115,9 @@ class Functions
     { }
 
     protected function add_filters()
-    { }
+    {
+       // add_filter('retrieve_password_message', 'remove_angle_brackets_around_url', 99, 1); 
+    }
 
     protected function remove_filters()
     { }
@@ -187,5 +189,6 @@ class Functions
 
     }
 }
+
 
 Functions::init();

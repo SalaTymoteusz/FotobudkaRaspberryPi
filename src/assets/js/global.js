@@ -700,9 +700,9 @@ function getSessionList() {
         for (var i = 0, len = response.length; i<len;i++ ){
             var lcase = response[i].session_name.toLowerCase()
             if (current_session_selected == response[i].session_id){
-                $('#current-session-box').html('<tr class="session-box active" id="' + response[i].session_id + '" ><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Aktywna</span></td><td class="activate-session"><i class="fas fa-check"></i></td><td class="load-images" onclick="getImageSet(' + response[i].session_id + ')">Załaduj zdjęcia<i class="fas fa-arrow-down"></i></td></tr>');
+                $('#current-session-box').html('<tr class="session-box active" id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Aktywna</span></td><td class="activate-session"><i class="fas fa-check"></i></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Załaduj zdjęcia</div><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
             }else{
-                $('#session-list').append('<tr class="session-box " id="' + response[i].session_id + '" ><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Nieaktywna</span></td><td class="activate-session" onclick="setSessionAuto(' + response[i].session_id + ')"><i class="fas fa-check-circle"></i>Aktywuj sesję</td><td class="load-images" onclick="getImageSet(' + response[i].session_id + ')">Załaduj zdjęcia<i class="fas fa-arrow-down"></i></td></tr>');
+                $('#session-list').append('<tr class="session-box " id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Nieaktywna</span></td><td><div class="activate-session g-button" onclick="setSessionAuto(' + response[i].session_id + ')"><i class="fas fa-check-circle"></i>Aktywuj sesję</div></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Załaduj zdjęcia</div><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
             } 
         }
     });
@@ -727,9 +727,9 @@ function getUserSessions(id){
         for (var i = 0, len = response.length; i < len; i++) {
             var lcase = response[i].session_name.toLowerCase()
             if (current_session_selected == response[i].session_id) {
-                $('#current-session-box').html('<div class="session-box active" id="' + response[i].session_id + '" ><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span><p><i class="fas fa-file-image"></i> <span class="session-name"  data-search-term="' + lcase + '">Sesja: ' + response[i].session_name + ' </span></p></p><p class="status">Aktualny status: <span class="session-status">Aktywne</span></p><p class="activate-session"><i class="fas fa-check"></i></p><p class="load-images" onclick="getImageSet(' + response[i].session_id + ')">Załaduj zdjęcia<i class="fas fa-arrow-down"></i></p></div >');
+                $('#current-session-box').html('<tr class="session-box active" id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Aktywna</span></td><td class="activate-session"><i class="fas fa-check"></i></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Załaduj zdjęcia</div><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
             } else {
-                $('#session-list').append('<div class="session-box " id="' + response[i].session_id + '" ><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span><p><i class="fas fa-file-image"></i> <span class="session-name"  data-search-term="' + lcase + '">Sesja: ' + response[i].session_name + ' </span></p></p><p class="status">Aktualny status: <span class="session-status">Nieaktywne</span></p><p class="activate-session" onclick="setSessionAuto(' + response[i].session_id + ')"><i class="fas fa-check-circle"></i>Aktywuj sesję</p><p class="load-images" onclick="getImageSet(' + response[i].session_id + ')">Załaduj zdjęcia<i class="fas fa-arrow-down"></i></p></div >');
+                $('#session-list').append('<tr class="session-box " id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Nieaktywna</span></td><td><div class="activate-session g-button" onclick="setSessionAuto(' + response[i].session_id + ')"><i class="fas fa-check-circle"></i>Aktywuj sesję</div></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Załaduj zdjęcia</div><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
             }
         }
     });
@@ -778,6 +778,29 @@ function deleteSession(id){
         $('#console_panel').text('Anulowano')
     } 
   
+}
+$("#code_form").submit(function (e) {
+    e.preventDefault();
+});
+function getThreeImages(){
+    var form = new FormData();
+
+    var set_code = document.getElementById("code_input").value;
+    console.log(set_code)
+    form.append("series_code", set_code);
+    var settings = {
+        "url": "https://fotobudkaraspberry.pl/getPhoto2.php?",
+        "method": "GET",
+        "timeout": 0,
+        "processData": false,
+        "mimeType": "multipart/form-data",
+        "contentType": false,
+        "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+    });
 }
 
 $(document).ready(function (e) {
@@ -840,11 +863,47 @@ $('.popup-overlay').on('click', function(e){
 })
 
 
+$('a[href*="#"]:not([href="#"])').click(function () {
+    if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
+        var e = $(this.hash);
+        if ((e = e.length ? e : $("[name=" + this.hash.slice(1) + "]")).length) return $("html, body").animate({
+            scrollTop: e.offset().top + -150
+        }, 1e3), window.innerWidth <= 992 && $(".navbar-toggler").trigger("click"), !1
+    }
+})
 
 
+        function id(v) { return document.getElementById(v); }
+        function loadbar() {
+            var ovrl = id("load-overlay"),
+                prog = id("progress"),
+                stat = id("progstat"),
+                img = document.images,
+                c = 0,
+                tot = img.length;
+            if (tot == 0) return doneLoading();
 
-
-
+            function imgLoaded() {
+                c += 1;
+                var perc = ((100 / tot * c) << 0) + "%";
+                prog.style.width = perc;
+                stat.innerHTML = "Ładowanie " + perc;
+                if (c === tot) return doneLoading();
+            }
+            function doneLoading() {
+                ovrl.style.opacity = 0;
+                setTimeout(function () {
+                    ovrl.style.display = "none";
+                }, 700);
+            }
+            for (var i = 0; i < tot; i++) {
+                var tImg = new Image();
+                tImg.onload = imgLoaded;
+                tImg.onerror = imgLoaded;
+                tImg.src = img[i].src;
+            }
+        }
+       // document.addEventListener('DOMContentLoaded', loadbar, false);
 //////////asasasa
 
 
@@ -1164,3 +1223,6 @@ $('.popup-overlay').on('click', function(e){
 //     }).always(function (e, o, t) { }))
 // });
 // //# sourceMappingURL=global.min.js.map
+
+
+

@@ -27,19 +27,6 @@ global $site_name;
 
 <body <?php body_class(); ?> itemscope="" itemtype="http://schema.org/WebPage">
     <header id="header" class=" w-100">
-        <span class="black-bar">
-            <?php 
-            $elements =  get_field('black_bar_elements','option'); 
-            if(isset($elements)){ 
-            foreach($elements as $el){?>
-                <div class="black-bar-contact">
-                    <i class="fas <?php echo $el['ikona'] ?>"></i>
-                    
-                    <a href="<?php if($el['ikona']=='fa-envelope'){echo "mailto:";}else{echo "tel:";} echo str_replace(' ', '', $el['element']);?>"><?php echo $el['element']?></a>
-                </div>
-            <?php }
-        }
-     ?></span>
         <div class="container-fluid d-flex flex-row pr-5 align-items-center">
             <div class="navbar">
                 <?php Template::get_template('_partials/header/logo',['class' => 'navbar-brand']); ?>

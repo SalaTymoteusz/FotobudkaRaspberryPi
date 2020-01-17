@@ -15,9 +15,12 @@ global $post;
 if ( in_array( 'administrator', (array) $user->roles ) ) {
     $user_version = 'admin';
 }
-elseif(is_user_logged_in()){
-    $user_version = 'user';
- }
+elseif(in_array( 'editor', (array) $user->roles )){
+    $user_version = 'editor';
+}
+elseif(in_array( 'subscriber', (array) $user->roles )){
+    $user_version = 'subscriber';
+}
 else{
  wp_redirect('https://fotobudkaraspberry.pl/wp-admin');
  exit();
@@ -28,35 +31,50 @@ else{
 
 <?php if($user_version == 'admin'){?> 
         <div class="sr-only" id="user_version_id"><?php  echo($user->ID); ?></div>
-    <div class="sr-only" id="user_version"><?php  echo('admin'); ?></div>
+        <div class="sr-only" id="user_version"><?php  echo('admin'); ?></div>
 <main class="l-main">
+
+    <div class="col-12 logo-panel"><?php global $site_name; ?>
+
+        <?php $custom_logo_id = get_theme_mod( 'custom_logo' ); ?>
+        <?php if(Validate::check_variable($custom_logo_id)): ?>
+            <?php $image = wp_get_attachment_image_src( $custom_logo_id , 'full' ); ?>
+
+        <a href="<?php echo home_url(); ?>" title="<?php echo $site_name; ?>"
+            <?php echo isset($class) ? ' class="'.$class.'"' : ''; ?>>
+            <img class="img-fluid" src="<?php echo $image[0]; ?>" alt="<?php echo $site_name; ?>">
+        </a>
+        <?php endif; ?>
+
+    </div>
+
+<div id="load-overlay">
+
+    <div class="loader"><img src="/wp-content/uploads/2020/01/loader.gif"/></div>
+    <div id="progstat"></div>
+    <div id="progress"></div>
+
+</div>
+
+    <div class="col-12"><a href="<?php echo wp_logout_url( home_url()); ?>" class="g-button p-2 m-2" title="Wyloguj">Wyloguj</a><a href="<?php echo admin_url(); ?>" class="g-button p-2 m-2" title="cms">CMS</a></div>
+
     <div class="content-wrapper content-wrapper--with-bg">
         <h2 class="page-title">Sesje</h2>
         <div class="page-content position-relative"> 
-           <div onclick="refreshList()" class="refresh-button">Odśwież<i class="ml-3 fas fa-sync-alt"></i></div>
+           <div onclick="refreshList()" class="refresh-button g-button"><i class="fas fa-sync-alt"></i>Odśwież</div>
            <h3 class="sub-title">Lista sesji</h3>
            <table class="session-list">
                <tr class="session-box header-row">
-                   <td>
-                       Nazwa sesji
-                   </td>
-                   <td>
-                       Użytkownik
-                   </td>
-                   <td>
-                       Status
-                   </td>
-                   <td>
-                       Akcje
-                   </td>
-                   <td>
-                       Zdjęcia
-                   </td>
+                   <td> Nazwa sesji </td>
+                   <td> Użytkownik </td>
+                   <td> Status </td>
+                   <td> Akcje </td>
+                   <td> Zdjęcia </td>
                </tr>
            </table>
             <table class="session-list" id="current-session-box">
            </table>
-           <div class="row p-4"><input type="text" class="live-search-box p-2 mr-5" placeholder="Wyszukaj"><div class="open-session-popup"><i class="mr-2 fas fa-plus"></i>Dodaj nową sesję</div></div>
+           <div class="row p-4"><input type="text" class="live-search-box p-2 mr-5" placeholder="Wyszukaj"><div class="open-session-popup g-button"><i class="mr-2 fas fa-plus"></i>Dodaj nową sesję</div></div>
            <div class="session-list live-search-list" id="session-list">
            </div>         
         </div>
@@ -103,31 +121,66 @@ else{
     </div>
 
     <div class="add-new-session" onclick="createSession()">
-        <i class="fas fa-plus"></i>
+        <i class="fas fa-plus"></i>Dodaj sesję
     </div>
 
     </div>
 
     </div>
 </div>
-<?php }elseif($user_version == 'user'){ ?>
+<!-- ...................................................... -->
+<?php }elseif($user_version == 'editor'){ ?>
 
  
 <main class="l-main">
+
+    <div class="col-12 logo-panel"><?php global $site_name; ?>
+
+        <?php $custom_logo_id = get_theme_mod( 'custom_logo' ); ?>
+        <?php if(Validate::check_variable($custom_logo_id)): ?>
+            <?php $image = wp_get_attachment_image_src( $custom_logo_id , 'full' ); ?>
+
+        <a href="<?php echo home_url(); ?>" title="<?php echo $site_name; ?>"
+            <?php echo isset($class) ? ' class="'.$class.'"' : ''; ?>>
+            <img class="img-fluid" src="<?php echo $image[0]; ?>" alt="<?php echo $site_name; ?>">
+        </a>
+        <?php endif; ?>
+
+    </div>
+
+    <div id="load-overlay">
+
+        <div class="loader"><img src="/wp-content/uploads/2020/01/loader.gif"/></div>
+        <div id="progstat"></div>
+        <div id="progress"></div>
+
+    </div>
+
+    <div class="col-12"><a href="<?php echo wp_logout_url( home_url()); ?>" class="g-button p-2 m-2" title="Wyloguj">Wyloguj</a></div>
+
     <div class="sr-only" id="user_version_id"><?php  echo($user->ID); ?></div>
     <div class="sr-only" id="user_version"><?php  echo('user'); ?></div>
-    <h2 class="page-title">Użytkownik: <?php  echo($user->data->display_name); ?></h2>
-    <h2 class="page-title" >ID: <?php  echo($user->ID); ?></h2>
-    <h2 class="page-title">Email: <?php  echo($user->data->user_email); ?></h2>
+    <h2 class="page-title sr-only">Użytkownik: <?php  echo($user->data->display_name); ?></h2>
+    <h2 class="page-title sr-only" >ID: <?php  echo($user->ID); ?></h2>
+    <h2 class="page-title sr-only">Email: <?php  echo($user->data->user_email); ?></h2>
+    
     <div class="content-wrapper content-wrapper--with-bg">
         <h2 class="page-title">Sesje</h2>
         <div class="page-content position-relative"> 
-           <div onclick="refreshList()" class="refresh-button">Odśwież<i class="ml-3 fas fa-sync-alt"></i></div>
-           <h3 class="sub-title">Aktualna sesja</h3>
-            <div class="session-list" id="current-session-box">
-           </div>
+           <div onclick="refreshList()" class="refresh-button g-button"><i class="fas fa-sync-alt"></i>Odśwież</div>
            <h3 class="sub-title">Lista sesji</h3>
-           <div class="row pl-4"><input type="text" class="live-search-box p-2 mr-5" placeholder="Wyszukaj"><div class="open-session-popup"><i class="mr-2 fas fa-plus"></i>Dodaj nową sesję</div></div>
+           <table class="session-list">
+               <tr class="session-box header-row">
+                   <td> Nazwa sesji </td>
+                   <td> Użytkownik </td>
+                   <td> Status </td>
+                   <td> Akcje </td>
+                   <td> Zdjęcia </td>
+               </tr>
+           </table>
+            <table class="session-list" id="current-session-box">
+           </table>
+           <div class="row p-4"><input type="text" class="live-search-box p-2 mr-5" placeholder="Wyszukaj"><div class="open-session-popup g-button"><i class="mr-2 fas fa-plus"></i>Dodaj nową sesję</div></div>
            <div class="session-list live-search-list" id="session-list">
            </div>         
         </div>
@@ -155,27 +208,7 @@ else{
     <div class="row mt-3">
         <label class="col-6 sr-only" for="select-user-for-session">Wybierz użytkownika</label>
         <select class="form-control" id="new-session-user">
-            <option value="" disabled selected>Użytkownicy</option>
-            <?php
-                        if($user_version == 'admin'){
-                            $args = array(
-                            'role'    => 'editor',
-                            'orderby' => 'user_nicename',
-                            'order'   => 'ASC'
-                        );
-                        $users = get_users( $args );
-
-                        foreach ( $users as $user ) { ?>
-            
-                            <option value="<?php echo $user->ID; ?>"><?php echo $user->data->user_nicename; ?></option>
-                    <?php } ?>
-
-
-                        <?php }elseif($user_version == 'user'){?>
-                            <option value="<?php echo $user->ID; ?>"><?php echo $user->data->user_nicename; ?></option>
-                       <?php } ?>
-                        
-                        
+            <option value="<?php echo $user->ID; ?>" selected><?php echo $user->data->user_nicename; ?></option>
         </select>
     </div>
 
@@ -187,5 +220,12 @@ else{
 
     </div>
 </div>
+<?php }elseif($user_version == 'subscriber'){ ?>
+    
+    <div class="subscriber-message">
+        <div class="log-sub"><a href="<?php echo wp_logout_url( home_url()); ?>" class="g-button p-2 m-2" title="Wyloguj">Wyloguj</a></div>
+        <div class="msg-text"><?php _e('Cieszymy się, że zdecydowałeś/aś się na współpracę z nami. Aby zakończyć proces rejestracji skontaktuj się z administratorem','fotobudka') ?><div class="d-flex justify-content-center align-items-center mt-3"><a href="tel:111222333" class="g-button p-2 mr-2">Zadzwoń</a> <a href="mailto:mail@fotobudkaraspberry.pl" class="g-button p-2">Napisz</a></div></div>
+        
+    </div>
 <?php } ?>
 <?php get_footer(); ?>
