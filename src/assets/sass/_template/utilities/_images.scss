@@ -1,0 +1,116 @@
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+.lazy-container {
+    position: relative;
+    margin: 0;
+    width: 100%;
+
+    &:after {
+        content: '';
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background: $white;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+    }
+
+    &:before {
+        content: '';
+        z-index: 3;
+        display: inline-block;
+        width: $spinner-width;
+        height: $spinner-height;
+        vertical-align: text-bottom;
+        border: $spinner-border-width solid $green;
+        border-right-color: transparent;
+
+        border-radius: 50%;
+        animation: spinner-border .75s linear infinite;
+        position: absolute;
+        top: calc(50% - 1rem);
+        left: calc(50% - 1rem);
+        opacity: 1;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+    }
+
+    img {
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        transition: opacity 0.4s ease;
+    }
+
+
+
+    &.lazy-loaded {
+        img {
+            opacity: 1;
+        }
+
+        &:before,
+        &:after {
+            opacity: 0;
+        }
+    }
+
+}
+
+[data-bg] {
+    &:after {
+        content: '';
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background: $white;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+    }
+
+    &:before {
+        content: '';
+        z-index: 3;
+        display: inline-block;
+        width: $spinner-width;
+        height: $spinner-height;
+        vertical-align: text-bottom;
+        border: $spinner-border-width solid $green;
+        border-right-color: transparent;
+        // stylelint-disable-next-line property-blacklist
+        border-radius: 50%;
+        animation: spinner-border .75s linear infinite;
+        position: absolute;
+        top: calc(50% - 1rem);
+        left: calc(50% - 1rem);
+        opacity: 1;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+    }
+
+    &.loaded {
+
+        &:after,
+        &:before {
+            opacity: 0;
+        }
+    }
+}

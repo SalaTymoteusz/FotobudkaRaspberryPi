@@ -1,0 +1,45 @@
+ 
+    .cookie-popup {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        background-color: #0064CA;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        z-index: 999;
+        font-size: 14px;
+        width: 300px;
+        
+        p {
+            margin: 0;
+            padding: 1rem;
+            font-size: 14px;
+            @include md-down{
+                font-size: 12px;
+            }
+        }
+        button {
+            background-color: #20589A;
+            border: none;
+            color: #fff!important;
+            padding: 1rem 2rem;
+            @include down(575){
+                padding: 0.5rem 1rem;
+            }
+            cursor: pointer;
+            font-size: 14px;
+            &:hover {
+                background-color: #12518F;
+            }
+        }
+        a {
+            text-decoration: underline;
+            font-size: 14px;
+        }
+    }
+    #cookie a:hover,
+    #cookie a:focus {
+        color: #fff;
+    }
+    

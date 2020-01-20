@@ -49,4 +49,3 @@ $url = "https://fotobudka.projektstudencki.pl/uploadPhoto.php";
 //{
 //    $errmsg = "Please select the file";
 //}
-

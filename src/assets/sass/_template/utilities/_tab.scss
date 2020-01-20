@@ -1,0 +1,55 @@
+.nav-tabs {
+    border-bottom: 4px solid $green;
+    margin-bottom: 4.25rem;
+    margin-top: 2rem;
+
+    .nav-item {
+        flex: 0 0 25%;
+        max-width: 25%;
+        margin-bottom: 0;
+
+        @include md-down {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        &.show {
+            .nav-link {
+                border-color: $white;
+                color: $white;
+                background-color: $green;
+                cursor: default;
+            }
+        }
+    }
+
+    .nav-link {
+        color: $black;
+        background-color: $gray;
+        border-left: 5px solid $white;
+        border-right: 5px solid $white;
+        border-top: 0;
+        border-bottom: 0;
+        font-size: $fz4;
+        font-weight: $fw-black;
+        text-transform: uppercase;
+        text-align: center;
+        padding: 0.8rem 1rem;
+        transition: background-color 0.3s ease,
+            color 0.3s ease;
+
+        &:hover {
+            border-color: $white;
+            color: $white;
+            background-color: $gray-dark;
+        }
+
+        &.active {
+            border-color: $white;
+            color: $white;
+            background-color: $green;
+            cursor: default;
+        }
+
+    }
+}

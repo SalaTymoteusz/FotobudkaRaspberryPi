@@ -1,0 +1,80 @@
+
+.slide-wrap{
+    position: relative;
+     padding-left: 2rem;
+    &::before{
+        position: absolute;
+        content: '';
+        width: 200px;
+        height: 10vh;
+        height: 20vh;
+        top: 13%;
+        left: -30px;
+        background-color: #2A433A;
+    }
+}
+.background-slide{
+    min-height: 80vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.section-landing_page{
+    padding-top: 0;
+    position: relative;
+    &::before{
+        position: absolute;
+        content: '';
+        left: 1rem;
+        top:0;
+        width:3px;
+        background-color: rgba(87, 87, 87, 0.3);
+        z-index: 1;
+        height: 100%;
+    }
+    &::after{
+        position: absolute;
+        content: 'SCROLL';
+        left: 1.5rem;
+        bottom:0;
+        width:3px;
+     
+        z-index: 1;
+      
+    }
+    h2{
+        color: rgb(31, 31, 31);
+        font-family: "Lombok"; 
+        font-size: 3rem;  
+    }
+    p{
+        margin-left: 15px;
+        font-family: "Meticula";
+         font-size: 1.5rem;  
+    }
+}
+.section-text_image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0;
+    overflow: visible;
+    padding: 18rem 0;
+}
+.wedge-top{
+        position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+    height: 18rem;
+}
+.wedge-bottom{
+    position: absolute;
+    bottom: -17.9rem;
+    width: 100%;
+    left: 0;
+    height: 18rem;
+}
+.simpleParallax{
+    overflow: visible !important;
+}

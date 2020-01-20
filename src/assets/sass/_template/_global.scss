@@ -1,0 +1,281 @@
+* {
+    font-family: 'Meticula', 'Helvetica Neue', 'Helvetica', sans-serif;
+    outline: none;
+
+    &:after,
+    &:before {
+        outline: none;
+    }
+}
+
+
+::selection {
+    background: $blue;
+    color: $white;
+}
+
+
+
+body {
+    overflow-x: hidden;
+    position: relative;
+}
+
+
+a {
+    color: $light-blue;
+    transition: color .3s ease;
+
+    &:hover {
+        color: $dark-blue;
+        text-decoration: underline;
+    }
+}
+
+h1 {
+    font-weight: 700;
+}
+
+h2 {
+    font-size: $fz7;
+    color: black;
+    font-weight: $fw_bold;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+
+    @include xxl-down {
+        font-size: $fz7 * 0.9;
+    }
+
+    @include lg-down {
+        font-size: $fz7 * 0.8;
+        margin-bottom: 25px;
+    }
+}
+
+
+
+
+h3 {
+    font-size: $fz8;
+    margin-bottom: 28px;
+    margin-top: 28px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: black;
+
+    @include xxl-down {
+        font-size: $fz8 * 0.9;
+    }
+
+    @include lg-down {
+        font-size: $fz8 * 0.8;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+}
+
+h4 {
+    font-size: $fz9;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 20px;
+
+    @include xxl-down {
+        font-size: $fz9 * 0.9;
+    }
+}
+
+h5 {
+    margin-top: 8px;
+    margin-bottom: 14px;
+    font-size: $fz1;
+    font-weight: $fw-black;
+
+    @include xxl-down {
+        font-size: $fz1 * 0.9;
+    }
+}
+
+
+h6 {
+    margin-bottom: 33px;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+        margin-bottom: 23px;
+    }
+
+    @include lg-down {
+        font-size: $fz0 * 0.8;
+        margin-bottom: 18px;
+    }
+}
+
+p {
+    font-size: $fz0;
+    margin-bottom: 20px;
+    line-height: 1.7em;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+        margin-bottom: 1.5rem;
+    }
+
+    @include lg-down {
+        font-size: $fz0 * 0.8;
+    }
+}
+
+ul,
+ol {
+    margin-bottom: 20px;
+
+    @include xxl-down {
+        font-size: 1.5rem
+    }
+
+}
+
+li {
+    font-size: $fz0;
+    line-height: 1.75em;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+    }
+
+    @include lg-down {
+        font-size: $fz0 * 0.8;
+    }
+}
+
+main {
+    overflow: hidden;
+    position: relative;
+ 
+}
+
+address {
+    font-size: $fz0;
+
+    @include xxl-down {
+        font-size: $fz0 * 0.9;
+    }
+}
+
+.gmnoprint img {
+    max-width: none;
+}
+
+
+
+.gm-style img {
+    width: auto !important;
+    max-height: 100% !important;
+}
+
+.small-image{
+    height: 50px !important;
+    width: 50px !important;
+}
+
+.login h1 a{
+    background-image: url('/wp-content/uploads/2019/12/rsz_no_contour_transparent-1-2.png') !important;
+}
+
+
+.code{
+    padding-bottom: 6rem;
+    li { list-style: none; }
+p, h1, h2, h3, h4, h5, h6 { margin-top: 0; }
+a { text-decoration: none; }
+input { border-style: none; background: transparent; outline: none; }
+button { padding: 0; background: none; border: none; outline: none; }
+    h1.demo {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: normal;
+  margin-bottom: 1rem;
+  color: #f5f6ff;
+}
+a.demo {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: normal;
+  color: rgba(202, 205, 239, 0.8);
+  margin-bottom: 3rem;
+}
+.demo-flex-spacer {
+  flex-grow: 1;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  //justify-content: center;
+  height: 100vh;
+  max-width: 1600px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+// colors
+$input-background: rgba(57, 63, 84, 0.8);
+$input-text-inactive: #7881A1;
+$input-text-active: #BFD2FF;
+
+// gradient animation
+@keyframes gradient { 
+  0%{background-position:0 0}
+  100%{background-position:100% 0}
+}
+
+.webflow-style-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 2px;
+  padding: 1.4rem 2rem 1.6rem;
+  background: rgb(42, 67, 58);
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 999;
+    height: 4px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-position: 0% 0%;
+    background: linear-gradient(to right, #B294FF, #57E6E6, #FEFFB8, #57E6E6, #B294FF, #57E6E6);
+    background-size: 500% auto;
+    animation: gradient 3s linear infinite;
+  }
+}
+
+.webflow-style-input input {
+  flex-grow: 1;
+  color: $input-text-active;
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  &::-webkit-input-placeholder {
+    color: $input-text-inactive;
+  }
+}
+
+.webflow-style-input button {
+  color:  $input-text-inactive;
+  font-size: 2.4rem;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  transition: color .25s;
+  &:hover {
+    color: $input-text-active;
+  }
+}
+}
