@@ -126,7 +126,8 @@ class Template extends Functions{
         // wp_register_script('markerclusterer_js', get_template_directory_uri() . '/js/markerclusterer.min.js', array('jquery') ,'', true );
         wp_register_script('images_js', get_template_directory_uri() . '/assets/js/lazy.min.js', ['jquery'] ,'', true );
         wp_register_script('global_js', get_template_directory_uri() . '/assets/js/global.min.js', ['jquery'] ,'', true );
-         wp_register_script('parallax', get_template_directory_uri() . '/assets/js/simpleParallax.min.js', [] ,'', true );
+        wp_register_script('marvin_js', get_template_directory_uri() . '/assets/js/marvin.min.js', ['jquery'] ,'', true );
+        //wp_register_script('parallax', get_template_directory_uri() . '/assets/js/simpleParallax.min.js', [] ,'', true );
     
         // LOAD FILES
 
@@ -143,19 +144,20 @@ class Template extends Functions{
         
         wp_enqueue_script('bootstrap_js');
         wp_enqueue_script('flickity_js');
-        wp_enqueue_script('parallax');
+        wp_enqueue_script('marvin_js');
+        //wp_enqueue_script('parallax');
         wp_enqueue_script('global_js');
         
 
-        wp_localize_script( 
-            'global_js', 
-            'wtm_global_vars', 
-            array( 
-                '_wtm_nonce' => wp_create_nonce( 'wtm_ajax_action' ),
-                '_wtm_ajax' => admin_url( 'admin-ajax.php' ),
-                '_wtm_site_name' => $site_name,
-                '_wtm_map_marker' => get_theme_mod('map_marker')
-            ));
+        // wp_localize_script( 
+        //     'global_js', 
+        //     'wtm_global_vars', 
+        //     array( 
+        //         '_wtm_nonce' => wp_create_nonce( 'wtm_ajax_action' ),
+        //         '_wtm_ajax' => admin_url( 'admin-ajax.php' ),
+        //         '_wtm_site_name' => $site_name,
+        //         '_wtm_map_marker' => get_theme_mod('map_marker')
+        //     ));
         
         wp_enqueue_script('fontawesome_js');
     }

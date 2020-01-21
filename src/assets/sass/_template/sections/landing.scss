@@ -2,6 +2,9 @@
 .slide-wrap{
     position: relative;
      padding-left: 2rem;
+     @include down(575){
+         padding-right: 0;
+     }
     &::before{
         position: absolute;
         content: '';
@@ -22,6 +25,16 @@
 .section-landing_page{
     padding-top: 0;
     position: relative;
+    @include down(1360){
+        margin: 0;
+        margin-top: 6rem;
+        
+        .content_box{
+            position: absolute;
+            z-index: 1;
+            background: white;
+        }
+    }
     &::before{
         position: absolute;
         content: '';
@@ -46,11 +59,35 @@
         color: rgb(31, 31, 31);
         font-family: "Lombok"; 
         font-size: 3rem;  
+        @include down(767){
+             font-size: 2rem; 
+        }
+        @include down(575){
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            flex-wrap: wrap;
+            span{
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+        }
     }
     p{
         margin-left: 15px;
         font-family: "Meticula";
          font-size: 1.5rem;  
+         @include down(767){
+             font-size: 1.1rem;
+         }
+         @include down(575){
+             font-size: 0.9rem;
+             display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+         }
     }
 }
 .section-text_image{

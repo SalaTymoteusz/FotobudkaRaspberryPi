@@ -187,6 +187,10 @@ address {
 
 .code{
     padding-bottom: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     li { list-style: none; }
 p, h1, h2, h3, h4, h5, h6 { margin-top: 0; }
 a { text-decoration: none; }
@@ -239,7 +243,10 @@ $input-text-active: #BFD2FF;
   margin: 0 auto;
   border-radius: 2px;
   padding: 1.4rem 2rem 1.6rem;
-  background: rgb(42, 67, 58);
+  background: rgb(255, 255, 255);
+  @include down(575){
+      padding: 1.2rem 0.8rem 1.2rem;
+  }
   &:after {
     content: "";
     position: absolute;
@@ -259,7 +266,7 @@ $input-text-active: #BFD2FF;
 
 .webflow-style-input input {
   flex-grow: 1;
-  color: $input-text-active;
+  color: #696969;
   font-size: 1.8rem;
   line-height: 2.4rem;
   vertical-align: middle;
@@ -279,3 +286,357 @@ $input-text-active: #BFD2FF;
   }
 }
 }
+
+
+.images_popup{
+    background: #cccccccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    @include md-down{
+        background: #eaeaea;
+    }
+    .wrap_container{
+        cursor: default;
+        max-width: 1000px;
+        padding: 1rem;
+        min-height: 300px;
+        background: #efefef;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        border-radius: 4px;
+        position: relative;
+        @include md-down{
+            box-shadow: none;
+            background: #eaeaea;
+        }
+        .close{
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+            display: flex;
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+            &:hover{
+                cursor: pointer;
+            }
+            span{
+                width: 20px;
+                height: 2px;
+                border-radius: 2px;
+                background: black;
+                transform: rotate(45deg);
+                position: absolute;
+                &:last-child{
+                    transform: rotate(-45deg);
+                }
+                @include md-down{
+                    width: 30px;
+                }
+            }
+            @include md-down{
+                position: fixed;
+                background: white;
+                border-radius: 15px;
+            }
+        }
+        .images_list{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            @include md-down{
+                padding-bottom: 60px;
+            }
+                .wrap_image{
+                    display: flex;
+                    position: relative;
+                     
+                    .image-container{
+                        min-height: 230px;;
+                        min-width: 300px;
+                        background-size: cover;
+                        border-radius: 4px;
+                        margin: 10px;
+                        &:hover{
+                            cursor: zoom-in;
+                        }
+                       
+                    }
+                    &:nth-child(4n){
+                            width: 100%;
+                             .image-container{
+                                 width: 100%;
+                             }
+                        }
+                      .frame_button{
+                        position: absolute;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        bottom: 10px;
+                        border-radius: 15px 15px 0px 0px;
+                        height: 30px;
+                        pointer-events: all;
+                        display: flex;
+                        padding: 0px 7px;
+                        justify-content: center;
+                        align-items: center;
+                        background: #3367d6;
+                        color: white;
+                         &:hover{
+                            cursor: pointer;
+                        }
+                    }
+                }
+            
+        }
+        .action{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            @include md-down{
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: #efefef;
+                box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            }
+            .g-button{
+                margin: 10px;
+            }
+        }
+    }
+}
+
+
+.frame_container{
+    width: 100%;
+    height: 100%;
+    background: #000000e8;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+.close_edit{
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+            display: flex;
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+                background: white;
+            &:hover{
+                cursor: pointer;
+            }
+            span{
+                width: 20px;
+                height: 2px;
+                border-radius: 2px;
+                background: black;
+                transform: rotate(45deg);
+                position: absolute;
+                &:last-child{
+                    transform: rotate(-45deg);
+                }
+                @include md-down{
+                    width: 30px;
+                }
+            }
+            @include md-down{
+                position: fixed;
+                background: white;
+                border-radius: 15px;
+            }
+        }
+
+
+    .image_wrap{
+    height: calc(100% - 135px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    }
+    .filter_options{
+      
+        white-space: nowrap;
+        padding-top: 5px;
+        overflow: auto;
+        width: 100%;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        background: black;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        .option_box{
+            width: 190px;
+            height: 120px;
+            background: white;
+            display: inline-block;
+            position: relative;
+            &:hover{
+                cursor: pointer;
+            }
+            .trigger{
+                width: 100%;
+                position: absolute;
+                height: auto;
+                background: white;
+                text-align: center;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+    }
+}
+
+$shade-10: #2c3e50 !default;
+$shade-1: #d7dcdf !default;
+$shade-0: #fff !default;
+$teal: #1abc9c !default;
+.range-slider {
+    position: fixed;
+    bottom: 120px;
+    left: 0;
+    background: black;
+    margin: 0px 0px 15px 0%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+// Range Slider
+$range-width: 100% !default;
+
+$range-handle-color: $shade-10 !default;
+$range-handle-color-hover: $teal !default;
+$range-handle-size: 20px !default;
+
+$range-track-color: $shade-1 !default;
+$range-track-height: 10px !default;
+
+$range-label-color: $shade-10 !default;
+$range-label-width: 60px !default;
+
+.range-slider {
+  width: $range-width;
+}
+
+.range-slider__range {
+  -webkit-appearance: none;
+  width: calc(100% - (#{$range-label-width + 13px}));
+  height: $range-track-height;
+  border-radius: 5px;
+  background: $range-track-color;
+  outline: none;
+  padding: 0;
+  margin: 0;
+
+  // Range Handle
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: $range-handle-size;
+    height: $range-handle-size;
+    border-radius: 50%;
+    background: $range-handle-color;
+    cursor: pointer;
+    transition: background .15s ease-in-out;
+
+    &:hover {
+      background: $range-handle-color-hover;
+    }
+  }
+
+  &:active::-webkit-slider-thumb {
+    background: $range-handle-color-hover;
+  }
+
+  &::-moz-range-thumb {
+    width: $range-handle-size;
+    height: $range-handle-size;
+    border: 0;
+    border-radius: 50%;
+    background: $range-handle-color;
+    cursor: pointer;
+    transition: background .15s ease-in-out;
+
+    &:hover {
+      background: $range-handle-color-hover;
+    }
+  }
+
+  &:active::-moz-range-thumb {
+    background: $range-handle-color-hover;
+  }
+  
+  // Focus state
+  &:focus {
+    
+    &::-webkit-slider-thumb {
+      box-shadow: 0 0 0 3px $shade-0,
+                  0 0 0 6px $teal;
+    }
+  }
+}
+
+
+// Range Label
+.range-slider__value {
+  display: inline-block;
+  position: relative;
+  width: $range-label-width;
+  color: $shade-0;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 3px;
+  background: $range-label-color;
+  padding: 5px 10px;
+  margin-left: 8px;
+
+  &:after {
+    position: absolute;
+    top: 8px;
+    left: -7px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-right: 7px solid $range-label-color;
+    border-bottom: 7px solid transparent;
+    content: '';
+  }
+}
+
+
+// Firefox Overrides
+::-moz-range-track {
+    background: $range-track-color;
+    border: 0;
+}
+
+input::-moz-focus-inner,
+input::-moz-focus-outer { 
+  border: 0; 
+}
+
+// #canvas1{
+//     width: 100%;
+//     height: 100%;
+// }

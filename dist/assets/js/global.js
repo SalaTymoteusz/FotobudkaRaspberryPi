@@ -1,7 +1,7 @@
 lazaLoadingImages = false;
 window_loaded = false;
 
-function initMap(){
+function initMap() {
     var map;
     var map_loaded = false;
     var barkam_styles = [
@@ -192,8 +192,8 @@ function initMap(){
             ]
         }
     ];
-    
-    
+
+
     function initMap() {
         //console.log('window '+ window_loaded);
         if (!window_loaded)
@@ -201,35 +201,35 @@ function initMap(){
         //console.log('map '+ map_loaded);
         if (map_loaded)
             return true;
-    
+
         var el = document.getElementById('map');
-            //console.log(el)
-        if (!el || !$(el).is(":visible")){
+        //console.log(el)
+        if (!el || !$(el).is(":visible")) {
             //console.log('visible')
             return true;
         }
-    
+
         var $window = $(window),
             windowHeight = $window.height(),
             windowScrollTop = $window.scrollTop();
-    
+
         if ($(el).offset().top - windowScrollTop > windowHeight * 1)
             return true;
-    
+
         map_loaded = true;
         var map_lat = (parseFloat(document.getElementById('map_lat').dataset.value));
 
         var map_lng = (parseFloat(document.getElementById('map_lng').dataset.value));
-       
+
         var pin_url = (document.getElementById('pin_url').dataset.value);
 
         var address_url = (document.getElementById('pin_url').dataset.value);
-        
+
         var position = {
             lat: map_lat,
             lng: map_lng
         };
-    
+
         map = new google.maps.Map(el, {
             zoom: window.innerWidth < 575 ? 9 : 11,
             gestureHandling: window.innerWidth < 992 ? 'cooperative' : 'cooperative',
@@ -243,8 +243,8 @@ function initMap(){
             fullscreenControl: false,
             styles: barkam_styles
         });
-        
-       
+
+
         var marker = new google.maps.Marker({
             position: {
                 lat: position.lat,
@@ -254,38 +254,38 @@ function initMap(){
             icon: pin_url,
             url: address_url,
             title: "Cookie Travel",
-    
+
         });
-    
+
         var myoverlay = new google.maps.OverlayView();
-      myoverlay.draw = function () {
-        //this assigns an id to the markerlayer Pane, so it can be referenced by CSS
-        this.getPanes().markerLayer.id='markerLayer'; 
-      };
-      myoverlay.setMap(map);
-      marker.addListener('click', function () {
+        myoverlay.draw = function () {
+            //this assigns an id to the markerlayer Pane, so it can be referenced by CSS
+            this.getPanes().markerLayer.id = 'markerLayer';
+        };
+        myoverlay.setMap(map);
+        marker.addListener('click', function () {
             window.open(this.url)
-        }, {passive: true})
+        }, { passive: true })
     };
-    
-    
+
+
     window_loaded = false;
     $(document).ready(function () {
         $('body').show();
-    
+
         window_loaded = true;
- 
+
         initMap();
-    
-        $( window ).resize(function() {
-          initMap();
-       });
-    
-       $( window ).scroll(function() {
-        initMap();
-     });
+
+        $(window).resize(function () {
+            initMap();
+        });
+
+        $(window).scroll(function () {
+            initMap();
+        });
     });
-   
+
 }
 function getScrollbarWidth() {
 
@@ -361,7 +361,7 @@ function swipeDetect(el, callback) {
         allowedTime = 300, // maximum time allowed to travel that distance
         elapsedTime,
         startTime,
-        handleswipe = callback || function (swipedir) {}
+        handleswipe = callback || function (swipedir) { }
 
     touchsurface.addEventListener('touchstart', function (e) {
         var touchobj = e.changedTouches[0];
@@ -546,19 +546,19 @@ $(document).on('click', '#gallery-load-more', function (e) {
     }
 })
 
-$.fn.preventKeyboard = function() {
+$.fn.preventKeyboard = function () {
     return this
-      .filter('input')
-      .on('focus', function() {
-        $(this)
-          .attr('readonly', 'readonly')
-          .blur()
-          .removeAttr('readonly');
-      });
-  };
+        .filter('input')
+        .on('focus', function () {
+            $(this)
+                .attr('readonly', 'readonly')
+                .blur()
+                .removeAttr('readonly');
+        });
+};
 
-var images = document.querySelectorAll('img');
-new simpleParallax(images);
+//var images = document.querySelectorAll('img');
+//new simpleParallax(images);
 
 var user = $('#user_version').text();
 var user_id = $('#user_version_id').text();
@@ -568,33 +568,34 @@ function getImageSet(id) {
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url": "https://fotobudkaraspberry.pl/getPhoto2.php?session_id="+id,
+        "url": "https://fotobudkaraspberry.pl/getPhoto2.php?session_id=" + id,
         "method": "GET",
     }
 
     $('#image-list').text('');
     $.ajax(settings).done(function (response) {
 
-        if (response.length==0){
+        if (response.length == 0) {
             $('#image-list').html('<span class="text-danger">Brak zdjęć w wybranej sesji...</span>')
-        }else{
+        } else {
             document.getElementById("console_panel").innerHTML = JSON.stringify(response, undefined, 2);
-            for (var i = 0, len = response.length; i<len;i++ ){
-                $('#image-list').append('<a href="' + response[i].url + '" class="image-container ari-fancybox" title="image"  rel="commune" data-fancybox-group="fb_gallery_0_0" data-fancybox="fb_gallery_0_0" style="background-image: url(' + response[i].url +')"></a>')
+            for (var i = 0, len = response.length; i < len; i++) {
+                var url_fixed = response[i].url;
+                url_fixed = url_fixed.split(' ').join('%20');
+               // console.log(url_fixed)
+               // % 20
+                $('#image-list').append('<a href="' + url_fixed + '" class="image-container ari-fancybox" title="image"  rel="commune" data-fancybox-group="fb_gallery_0_0" data-fancybox="fb_gallery_0_0" style="background-image: url(' + url_fixed + ')"></a>')
             }
         }
-        
+
     });
 
 }
-
-
-
-function uploadPhoto(){
+function uploadPhoto() {
     var form = new FormData();
     var image = $("#upload_image").prop('files');
 
-    form.append("photo",image);
+    form.append("photo", image);
     form.append("session_id", "38");
     form.append("series_code", "afg1234");
 
@@ -613,8 +614,6 @@ function uploadPhoto(){
         $('#console_panel').append(response)
     });
 }
-
-
 function setSessionAuto(id) {
     current_session_selected = id;
     var form = new FormData();
@@ -633,14 +632,14 @@ function setSessionAuto(id) {
 
     $.ajax(settings).done(function (response) {
         document.getElementById("console_panel").innerHTML = JSON.stringify(response, undefined, 2);
-      
+
         if (user == 'admin') {
             getSessionList();
         } else if (user == 'user') {
             getUserSessions(user_id);
         }
     });
-    
+
 }
 function getSession() {
     var settings = {
@@ -693,25 +692,25 @@ function getSessionList() {
         console.log(response.length);
 
         document.getElementById("console_panel").innerHTML = JSON.stringify(response, undefined, 2);
- 
+
 
         console.log(response)
         $('#session-list').text('')
-        for (var i = 0, len = response.length; i<len;i++ ){
+        for (var i = 0, len = response.length; i < len; i++) {
             var lcase = response[i].session_name.toLowerCase()
-            if (current_session_selected == response[i].session_id){
-                $('#current-session-box').html('<tr class="session-box active" id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Aktywna</span></td><td class="activate-session"><i class="fas fa-check"></i></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Załaduj zdjęcia</div><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
-            }else{
-                $('#session-list').append('<tr class="session-box " id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].session_user_id + '</span></td><td class="status"> <span class="session-status">Nieaktywna</span></td><td><div class="activate-session g-button" onclick="setSessionAuto(' + response[i].session_id + ')"><i class="fas fa-check-circle"></i>Aktywuj sesję</div></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Załaduj zdjęcia</div><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
-            } 
+            if (current_session_selected == response[i].session_id) {
+                $('#current-session-box').html('<tr class="session-box active" id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].user_nicename + '</span></td><td class="status"> <span class="session-status">Aktywna</span></td><td class="activate-session"><i class="fas fa-check"></i></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')"><i class="fas fa-arrow-down"></i>Pokaż zdjęcia</div><a href="https://fotobudkaraspberry.pl/downloadImages.php?session_id=' + response[i].session_id +'" class="load-images g-button"><i class="fas fa-arrow-down"></i>Pobierz</a><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
+            } else {
+                $('#session-list').append('<tr class="session-box " id="' + response[i].session_id + '" ><td> <span class="session-name"  data-search-term="' + lcase + '">' + response[i].session_name + ' </span></td><td><span id="session-user">' + response[i].user_nicename + '</span></td><td class="status"> <span class="session-status">Nieaktywna</span></td><td><div class="activate-session g-button" onclick="setSessionAuto(' + response[i].session_id + ')"><i class="fas fa-check-circle"></i>Aktywuj sesję</div></td><td><div class="load-images g-button" onclick="getImageSet(' + response[i].session_id + ')">Pokaż zdjęcia</div><a href="https://fotobudkaraspberry.pl/downloadImages.php?session_id=' + response[i].session_id+'" class="load-images g-button"><i class="fas fa-arrow-down"></i>Pobierz</a><span class="delete-session" onclick="deleteSession(' + response[i].session_id + ')">&times</span></td></tr>');
+            }
         }
     });
 }
-function getUserSessions(id){
+function getUserSessions(id) {
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url": "https://fotobudkaraspberry.pl/getUserSessions.php?user_id="+id,
+        "url": "https://fotobudkaraspberry.pl/getUserSessions.php?user_id=" + id,
         "method": "GET",
 
     }
@@ -734,11 +733,7 @@ function getUserSessions(id){
         }
     });
 }
-
-
-
-
-function refreshList(){
+function refreshList() {
     $('#image-list').text('');
 
     if (user == 'admin') {
@@ -750,10 +745,9 @@ function refreshList(){
             getUserSessions(user_id);
         });
     }
-   
-}
 
-function deleteSession(id){
+}
+function deleteSession(id) {
 
     if (confirm("Czy napewno chcesz usunąć?")) {
         var form = new FormData();
@@ -773,33 +767,46 @@ function deleteSession(id){
             $('#console_panel').text('Usunięto')
             refreshList()
         });
-        
+
     } else {
         $('#console_panel').text('Anulowano')
-    } 
-  
+    }
+
 }
 $("#code_form").submit(function (e) {
     e.preventDefault();
 });
-function getThreeImages(){
-    var form = new FormData();
-
+function getThreeImages() {
+    //var form = new FormData();
+    $('#three_images_container').html(' ');
+    $('#action_buttons').html(' ');
     var set_code = document.getElementById("code_input").value;
     console.log(set_code)
-    form.append("series_code", set_code);
+    var url = "https://fotobudkaraspberry.pl/getPhoto2.php?series_code=" + set_code;
     var settings = {
-        "url": "https://fotobudkaraspberry.pl/getPhoto2.php?",
+        "async": true,
+        "crossDomain": true,
+        "url": url,
         "method": "GET",
-        "timeout": 0,
-        "processData": false,
-        "mimeType": "multipart/form-data",
-        "contentType": false,
-        "data": form
     };
 
     $.ajax(settings).done(function (response) {
         console.log(response);
+
+        if (response.length == 0) {
+            $('.images_popup').removeClass('d-none');
+            $('#three_images_container').html('<span class="text-danger w-100 text-center mt-5">Przykro nam, taki kod nie istnieje.</span>');
+        } else {
+            console.log(response.length)
+            $('.images_popup').removeClass('d-none');
+            $('.images_popup').attr('id', set_code);
+            for (var i = 0; i < response.length; i++) {
+                $('#three_images_container').append('<div class="wrap_image"><div class="frame_button"><i class="far fa-edit"></i></div><a href="' + response[i].url + '" class="image-container ari-fancybox" title="image"  rel="commune" data-fancybox-group="fb_gallery_0_0" data-fancybox="fb_gallery_0_0" style="background-image: url(' + response[i].url + ')"></a></div>')
+
+            }
+            $('#action_buttons').append('<a target="_blank" class="g-button" href="https://fotobudkaraspberry.pl/downloadImages.php?series_code=' + set_code +'">Pobierz</a>');
+
+        }
     });
 }
 
@@ -807,49 +814,50 @@ $(document).ready(function (e) {
 
     e(".live-search-list .session-box span").each(function () {
         e(this).attr("data-search-term", e(this).text().toLowerCase())
-    }), 
-    
-    e(".live-search-box").on("keyup touchstart", function () {
-        var o = e(this).val().toLowerCase();
-        console.log(o)
-        e(".live-search-list .session-box").each(function () {
-            o.length < 1 ? e(this).fadeIn("fast") : e(this).find(".session-name").filter("[data-search-term *= " + o + "]").length > 0 || o.length < 1 ? e(this).fadeIn("fast") : e(this).fadeOut("fast")
+    }),
+
+        e(".live-search-box").on("keyup touchstart", function () {
+            var o = e(this).val().toLowerCase();
+            console.log(o)
+            e(".live-search-list .session-box").each(function () {
+                o.length < 1 ? e(this).fadeIn("fast") : e(this).find(".session-name").filter("[data-search-term *= " + o + "]").length > 0 || o.length < 1 ? e(this).fadeIn("fast") : e(this).fadeOut("fast")
+            })
         })
-    })
 }),
 
 
 
-$(document).ready(function (e) {
+    $(document).ready(function (e) {
 
-    swipeDetect($('body')[0], function (direction) {
-        if (direction == 'right' && $('.navigation').hasClass('open')) {
-            $('#nav-menu-btn').trigger('click');
+        swipeDetect($('body')[0], function (direction) {
+            if (direction == 'right' && $('.navigation').hasClass('open')) {
+                $('#nav-menu-btn').trigger('click');
+            }
+        });
+
+        var user = $('#user_version').text();
+        var user_id = $('#user_version_id').text();
+        console.log(user)
+        console.log(user_id)
+        if (user == 'admin') {
+            $.when(getSession()).done(function () {
+                getSessionList();
+            });
+        } else if (user == 'user') {
+            $.when(getSession()).done(function () {
+                getUserSessions(user_id);
+            });
         }
-    });
-  
-     var user = $('#user_version').text();
-     var user_id = $('#user_version_id').text();
-     console.log(user)
-     console.log(user_id)
-     if (user == 'admin'){
-         $.when(getSession()).done(function () {
-             getSessionList();
-         });
-     }else if(user == 'user'){
-         $.when(getSession()).done(function () {
-             getUserSessions(user_id);
-         });
-     }
 
-   
-});
+        rangeSlider();
+    });
 
 
 $('.popup-wrap').on('click', function (e) {
     e.preventDefault();
     e.stopPropagation()
 })
+
 
 $('.open-session-popup').on('click', function (e) {
     $('.popup-overlay').toggleClass('d-none')
@@ -858,9 +866,101 @@ $('.open-session-popup').on('click', function (e) {
 $('.close-popup-session').on('click', function (e) {
     $('.popup-overlay').toggleClass('d-none')
 })
-$('.popup-overlay').on('click', function(e){
+$('.popup-overlay').on('click', function (e) {
     $(this).toggleClass('d-none')
 })
+
+
+$('.images_popup .close').on('click', function (e) {
+    $('.images_popup').toggleClass('d-none')
+})
+$('.close_edit').on('click', function (e) {
+    $('.frame_container').toggleClass('d-none')
+})
+
+var imageOriginal = new MarvinImage();
+var imageProcessed = new MarvinImage();
+var imageDisplay = new MarvinImage();
+var canvas = document.getElementById('canvas1');
+var current_filter = $('.image_wrap').data('filter');
+
+function updateCurrentFilter(){
+    current_filter = $('.image_wrap').data('filter');
+}
+function imageLoaded() {
+    imageProcessed = imageOriginal.clone();
+    repaint();
+}
+
+function refreshCanvas(v){
+    updateCurrentFilter();
+    switch(current_filter){
+        case 'blackandwhite': FiltersBlackAndWhite(parseInt(v)); break;
+        case 'bright': FiltersBlur(parseInt(v)); break;
+    }
+}
+function repaint() {
+    
+    canvas.getContext("2d").fillRect(0, 0, canvas.width, canvas.height);
+    if (imageProcessed.getWidth() > 720) {
+        Marvin.scale(imageProcessed, imageDisplay, 720);
+        imageDisplay.draw(canvas);
+    } else {
+        imageProcessed.draw(canvas);
+    }
+    imageProcessed.update();
+}
+
+function FiltersGreyscale() {
+    $('.image_wrap').data('filter','greyscale');
+    $('.range-slider').addClass('d-none');
+    Marvin.grayScale(imageOriginal, imageProcessed);
+    repaint();
+}
+function FiltersBlackAndWhite(v) {
+    $('.image_wrap').data('filter', 'blackandwhite');
+    $('.range-slider').removeClass('d-none');
+    Marvin.blackAndWhite(imageOriginal, imageProcessed, v);
+    repaint();
+}
+function FiltersSepia(v) {
+    $('.image_wrap').data('filter', 'sepia');
+    $('.range-slider').addClass('d-none');
+    imageProcessed.clear(0xFF000000);
+    Marvin.sepia(imageOriginal, imageProcessed, 30);
+    repaint();
+}
+
+function FiltersEmboss() {
+    $('.image_wrap').data('filter', 'emboss');
+    $('.range-slider').addClass('d-none');
+    Marvin.emboss(imageOriginal, imageProcessed);
+    repaint();
+}
+
+function FiltersHalftone() {
+    $('.image_wrap').data('filter', 'halftone');
+    $('.range-slider').addClass('d-none');
+    Marvin.halftoneErrorDiffusion(imageOriginal, imageProcessed);
+    repaint();
+}
+function FiltersBlur(radius) {
+    $('.image_wrap').data('filter', 'blur');
+    $('.range-slider').removeClass('d-none');
+    Marvin.gaussianBlur(imageOriginal, imageProcessed, radius);
+    repaint();
+}
+
+
+$('.images_popup').on('click', '.frame_button',function (e) {
+    var selected_photo = $(this).siblings('.image-container').attr('href');
+
+    $('.frame_container').toggleClass('d-none')
+
+    imageOriginal.load(selected_photo, imageLoaded);
+})
+
+
 
 
 $('a[href*="#"]:not([href="#"])').click(function () {
@@ -873,37 +973,36 @@ $('a[href*="#"]:not([href="#"])').click(function () {
 })
 
 
-        function id(v) { return document.getElementById(v); }
-        function loadbar() {
-            var ovrl = id("load-overlay"),
-                prog = id("progress"),
-                stat = id("progstat"),
-                img = document.images,
-                c = 0,
-                tot = img.length;
-            if (tot == 0) return doneLoading();
 
-            function imgLoaded() {
-                c += 1;
-                var perc = ((100 / tot * c) << 0) + "%";
-                prog.style.width = perc;
-                stat.innerHTML = "Ładowanie " + perc;
-                if (c === tot) return doneLoading();
-            }
-            function doneLoading() {
-                ovrl.style.opacity = 0;
-                setTimeout(function () {
-                    ovrl.style.display = "none";
-                }, 700);
-            }
-            for (var i = 0; i < tot; i++) {
-                var tImg = new Image();
-                tImg.onload = imgLoaded;
-                tImg.onerror = imgLoaded;
-                tImg.src = img[i].src;
-            }
-        }
-       // document.addEventListener('DOMContentLoaded', loadbar, false);
+
+
+
+var rangeSlider = function(){
+  var slider = $('.range-slider'),
+      range = $('.range-slider__range'),
+      value = $('.range-slider__value');
+    
+  slider.each(function(){
+
+    value.each(function(){
+      var value = $(this).prev().attr('value');
+      $(this).html(value);
+
+    });
+
+    
+    range.on('input', function(){
+      $(this).next(value).html(this.value);
+            refreshCanvas(value[0].innerHTML);
+    });
+  });
+};
+
+    // // Gaussian Blur
+    // Marvin.gaussianBlur(image, imageOut, 5);
+    // imageOut.draw(canvas6);
+
+
 //////////asasasa
 
 
